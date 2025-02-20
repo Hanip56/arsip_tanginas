@@ -37,8 +37,8 @@ export const navigations: NavListType[] = [
   },
   {
     type: "single",
-    label: "Proyek",
-    href: "/proyek",
+    label: "Prasarana",
+    href: "/prasarana",
     icon: PiBuildingOffice,
   },
 ];

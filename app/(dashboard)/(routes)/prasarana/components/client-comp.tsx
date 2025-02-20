@@ -54,20 +54,20 @@ const ClientComp = ({ kategoris }: Props) => {
   if (query.isLoading || query.isPending) return <DataTableSkeleton />;
   if (query.isError) return <h1>Error...</h1>;
 
-  const proyeks = query.data?.data;
+  const prasaranas = query.data?.data;
 
   const initialData = upsertOpenId
-    ? proyeks.find((proyek) => proyek.id === upsertOpenId)
+    ? prasaranas.find((prasarana) => prasarana.id === upsertOpenId)
     : undefined;
 
-  const dataTable = proyeks.map((proyek) => ({
-    id: proyek.id,
-    nama: proyek.nama,
-    kategori: proyek.kategori.nama,
-    jenisLahan: proyek.jenisLahan,
-    status: proyek.status,
-    kecamatan: proyek.kecamatan,
-    tahunAnggaran: proyek.tahunAnggaran,
+  const dataTable = prasaranas.map((prasarana) => ({
+    id: prasarana.id,
+    nama: prasarana.nama,
+    kategori: prasarana.kategori.nama,
+    jenisLahan: prasarana.jenisLahan,
+    status: prasarana.status,
+    kecamatan: prasarana.kecamatan,
+    tahunAnggaran: prasarana.tahunAnggaran,
   }));
 
   return (
@@ -145,7 +145,7 @@ const ClientComp = ({ kategoris }: Props) => {
                 onClick={() => setUpsertOpenId("new")}
               >
                 <PlusIcon className="size-4 mr-2" />{" "}
-                <span className="line-clamp-1">Tambah proyek</span>
+                <span className="line-clamp-1">Tambah prasarana</span>
               </Button>
             </div>
             <DataTable
