@@ -1,0 +1,62 @@
+"use client";
+
+import { useConfirm } from "@/hooks/use-confirm";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { deleteMultiple } from "@/lib/fetcher/prasarana";
+import RowOptionGeneral from "@/components/row-option-general";
+import { ColumnType } from "./columns";
+
+type CellActionProps = {
+  data: ColumnType;
+  handleOpenUpdate: (id: string) => void;
+};
+
+const CellAction: React.FC<CellActionProps> = ({ data, handleOpenUpdate }) => {
+  const queryClient = useQueryClient();
+  const [ConfirmationDialog, confirm] = useConfirm(
+    "Are you sure?",
+    `Prasarana ini akan dihapus`
+  );
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteMultiple,
+    onSuccess: (data) => {
+      toast(`Prasarana telah dihapus.`, {
+        className: "text-emerald-600 font-semibold",
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: [`prasaranas`],
+        exact: false,
+      });
+    },
+    onError: (error) => {
+      toast(`Gagal menghapus prasarana.`, {
+        className: "text-rose-600 font-semibold",
+      });
+      console.log(error);
+    },
+  });
+
+  const handleDelete = async () => {
+    const ok = await confirm();
+
+    if (!ok) return;
+
+    deleteMutation.mutate({ ids: [data.id] });
+  };
+
+  return (
+    <>
+      <ConfirmationDialog />
+      <RowOptionGeneral
+        detailHref={`prasarana/${data.id}`}
+        handleUpdate={() => handleOpenUpdate(data.id)}
+        handleDelete={handleDelete}
+      />
+    </>
+  );
+};
+
+export default CellAction;
