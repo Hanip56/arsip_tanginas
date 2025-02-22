@@ -85,10 +85,11 @@ model Prasarana {
 }
 
 model ArsipKategori {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  nama     String
-  imageUrl String?
-  Arsip    Arsip[]
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  nama      String
+  deskripsi String?
+  imageUrl  String?
+  Arsip     Arsip[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -11,19 +11,20 @@ export async function POST(req: NextRequest) {
   try {
     // parse form data
     const formData = await req.formData();
-    const files = formData.getAll("files") as File[];
-    const prasaranaId = formData.get("prasaranaId") as string;
-    const arsipKategoriId = formData.get("arsipKategoriId") as string;
+    const file = formData.get("file") as File;
 
-    if (!prasaranaId || !arsipKategoriId) {
-      return new NextResponse("prasaranaId & arsipKategoriId are required", {
-        status: 400,
-      });
-    }
-
-    if (!files.length) {
+    if (!file) {
       return new NextResponse("No file uploaded", { status: 400 });
     }
+
+    // Convert file to buffer
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // Convert buffer to a readable stream
+    const readableStream = new Readable();
+    readableStream.push(buffer);
+    readableStream.push(null); // End the stream
 
     // Authenticate with Google Service Account
     const auth = new google.auth.GoogleAuth({
@@ -33,52 +34,29 @@ export async function POST(req: NextRequest) {
 
     const drive = google.drive({ version: "v3", auth });
 
-    // Check if exist or create folder based on prasaranaId
-    const folderPrasaranaId = await findOrCreateFolder(
+    // 1️⃣ **Check if the folder already exists (optional)**
+    const folderId = await findOrCreateFolder(
       drive,
-      prasaranaId,
+      "Rumah Sakit",
       PARENT_FOLDER_ID
     );
 
-    // Check if exist or create folder based on arsipKategoriId
-    const folderArsipKategoriId = await findOrCreateFolder(
-      drive,
-      arsipKategoriId,
-      folderPrasaranaId
-    );
+    // 1️⃣ **Check subFolder already exists (optional)**
+    const subfolderId = await findOrCreateFolder(drive, "Photo 30%", folderId);
 
-    // Upload multiple files to the created folderArsipKategoriId folder
-    const uploadedFiles = [];
-    for (const file of files) {
-      const arrayBuffer = await file.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      const readableStream = new Readable();
-      readableStream.push(buffer);
-      readableStream.push(null);
+    const response = await drive.files.create({
+      requestBody: {
+        name: file.name,
+        parents: [subfolderId],
+      },
+      media: {
+        mimeType: file.type,
+        body: readableStream,
+      },
+      fields: "id",
+    });
 
-      const fileResponse = await drive.files.create({
-        requestBody: {
-          name: file.name,
-          parents: [folderArsipKategoriId], // Upload files inside the same folder
-        },
-        media: {
-          mimeType: file.type,
-          body: readableStream,
-        },
-        fields: "id, name, webViewLink",
-      });
-
-      uploadedFiles.push({
-        fileId: fileResponse.data.id,
-        fileName: fileResponse.data.name,
-        fileLink: fileResponse.data.webViewLink,
-      });
-    }
-
-    return NextResponse.json(
-      { folderId: folderArsipKategoriId, uploadedFiles },
-      { status: 200 }
-    );
+    return NextResponse.json({ fileId: response.data.id }, { status: 200 });
   } catch (error) {
     console.log("[UPLOAD_FILE]", error);
     return new NextResponse("internal error", { status: 500 });

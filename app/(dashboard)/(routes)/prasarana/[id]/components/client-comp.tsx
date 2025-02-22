@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -9,14 +8,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import SelectWithLabel from "@/components/ui/select-with-label";
-import { arsipKategori } from "@/constants/arsip";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { FileTextIcon, UploadIcon } from "lucide-react";
-import React from "react";
-import UploadSingleModal from "./upload-single-modal";
+import React, { useState } from "react";
+import UploadMultipleModal from "./upload-multiple-modal";
+import { ArsipKategori } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
+import { getByFolderName } from "@/lib/fetcher/drive";
+import ShowFiles from "./show-files";
 
-const ClientComp = () => {
+type Props = {
+  arsipKategoris: ArsipKategori[];
+};
+
+const ClientComp = ({ arsipKategoris }: Props) => {
+  const [arsipKategoriId, setArsipKategoriId] = useState(
+    arsipKategoris[0]?.id || ""
+  );
+
+  const query = useQuery({
+    queryKey: ["files", { folderName: arsipKategoriId }],
+    queryFn: () => getByFolderName({ folderName: arsipKategoriId }),
+  });
+
   return (
     <div>
       {/* filter */}
@@ -26,15 +38,17 @@ const ClientComp = () => {
             <Label className="text-zinc-500 text-xs block mb-2">
               Jenis arsip
             </Label>
-            <Select>
+            <Select
+              value={arsipKategoriId}
+              onValueChange={(e) => setArsipKategoriId(e)}
+            >
               <SelectTrigger className="w-80">
                 <SelectValue placeholder="Arsip kategori" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="semua">Semua</SelectItem>
-                {arsipKategori.map((kategori) => (
-                  <SelectItem value={kategori} key={kategori}>
-                    {kategori}
+                {arsipKategoris.map((kategori) => (
+                  <SelectItem value={kategori.id} key={kategori.id}>
+                    {kategori.nama}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -59,7 +73,7 @@ const ClientComp = () => {
             placeholder="Urutkan"
           /> */}
         </div>
-        <UploadSingleModal />
+        <UploadMultipleModal arsipKategoris={arsipKategoris} />
       </div>
 
       {/* document */}
@@ -68,24 +82,12 @@ const ClientComp = () => {
           <h6 className="font-semibold">File</h6>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 py-4">
-          {Array(4)
-            .fill("")
-            .map((_, i) => (
-              <div key={i} className="relative w-full pt-[100%]">
-                <div className="absolute top-0 left-0 w-full h-full bg-gray-100 rounded-lg p-4 flex flex-col gap-4">
-                  <header className="flex items-center gap-4 px-2">
-                    <FileTextIcon className="size-4" />
-                    <div className="flex-1 text-[0.925rem] font-medium line-clamp-1">
-                      Some document title
-                    </div>
-                    <DotsVerticalIcon className="size-4" />
-                  </header>
-                  <main className="w-full h-full bg-white rounded-lg"></main>
-                </div>
-              </div>
-            ))}
-        </div>
+        <ShowFiles
+          isError={query.isError}
+          isLoading={query.isLoading || query.isPending}
+          data={query.data?.files}
+          arsipKategoriId={arsipKategoriId}
+        />
       </div>
     </div>
   );

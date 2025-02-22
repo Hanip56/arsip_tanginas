@@ -1,6 +1,6 @@
 import { IconType } from "react-icons/lib";
 import { RiDashboardLine } from "react-icons/ri";
-import { MdOutlineCategory } from "react-icons/md";
+import { MdCategory, MdOutlineCategory } from "react-icons/md";
 import { PiBuildingOffice } from "react-icons/pi";
 
 type NavType = {
@@ -34,6 +34,12 @@ export const navigations: NavListType[] = [
     label: "Kategori",
     href: "/kategori",
     icon: MdOutlineCategory,
+  },
+  {
+    type: "single",
+    label: "Arsip kategori",
+    href: "/arsip-kategori",
+    icon: MdCategory,
   },
   {
     type: "single",
