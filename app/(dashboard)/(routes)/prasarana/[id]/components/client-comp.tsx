@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import React, { useRef, useState } from "react";
-import UploadMultipleModal from "./upload-multiple-modal";
+import UploadMultipleModal from "./upload-multiple-modal-with-progress";
 import { ArsipKategori } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { getByFolderName } from "@/lib/fetcher/drive";
@@ -137,7 +137,10 @@ const ClientComp = ({ arsipKategoris }: Props) => {
             placeholder="Urutkan"
           /> */}
         </div>
-        <UploadMultipleModal arsipKategoris={arsipKategoris} />
+        <UploadMultipleModal
+          arsipKategoris={arsipKategoris}
+          currentArsipKategoriId={arsipKategoriId}
+        />
       </div>
 
       {/* document */}

@@ -6,7 +6,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -23,18 +22,35 @@ import Dropzone from "./dropzone";
 import { usePathname } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { DriveFile } from "@/types/drive";
 
 type Props = {
   arsipKategoris: ArsipKategori[];
+  currentArsipKategoriId: string;
 };
 
-const UploadMultipleModal = ({ arsipKategoris }: Props) => {
+interface UploadProgress {
+  fileName: string;
+  progress: number;
+}
+
+interface UploadedFile {
+  fileName: string;
+  fileLink: string;
+}
+
+const UploadMultipleModal = ({
+  arsipKategoris,
+  currentArsipKategoriId,
+}: Props) => {
   const [files, setFiles] = useState<File[] | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [arsipKategoriId, setArsipKategoriId] = useState(
-    arsipKategoris[0]?.id ?? ""
+    currentArsipKategoriId ?? ""
   );
+  const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
 
   const queryClient = useQueryClient();
   const pathname = usePathname();
@@ -73,6 +89,57 @@ const UploadMultipleModal = ({ arsipKategoris }: Props) => {
     if (!isLoading && !open) {
       setOpen(false);
     }
+  };
+
+  const uploadSingleFile = (file: File) => {
+    return new Promise<void>((resolve, reject) => {
+      const formData = new FormData();
+      formData.append("files", file);
+      formData.append("prasaranaId", prasaranaId);
+      formData.append("arsipKategoriId", arsipKategoriId);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/api/upload", true);
+
+      // upload progress
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const progress = Math.round((event.loaded / event.total) * 100);
+          setUploadProgress((prevProgress) => {
+            const newProgress = [...prevProgress];
+            const foundProgressIndex = newProgress.findIndex(
+              (progress) => progress.fileName === file.name
+            );
+            if (foundProgressIndex !== -1) {
+              newProgress[foundProgressIndex].progress = progress;
+            } else {
+              newProgress.push({ fileName: file.name, progress });
+            }
+
+            return newProgress;
+          });
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const data = JSON.parse(xhr.responseText);
+          setUploadedFiles((prevFiles) => [
+            ...prevFiles,
+            { fileName: data.fileName, fileLink: data.fileLink },
+          ]);
+          resolve();
+        } else {
+          reject(new Error("Upload failed"));
+        }
+      };
+
+      xhr.onerror = () => {
+        reject(new Error("Upload error"));
+      };
+
+      xhr.send(formData);
+    });
   };
 
   return (

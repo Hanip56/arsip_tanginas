@@ -42,7 +42,7 @@ const FileCard = ({ file, arsipKategoriId }: Props) => {
       const { signal } = abortController.current;
 
       try {
-        const res = await axios.get(`/api/download?fileId=${file.id}`, {
+        const res = await axios.get(`/api/files/download?fileId=${file.id}`, {
           responseType: "blob",
           signal,
           onDownloadProgress: (progressEvent) => {
@@ -88,28 +88,32 @@ const FileCard = ({ file, arsipKategoriId }: Props) => {
     });
   };
 
-  const deleteMutation = useMutation({
-    mutationFn: deleteFileById,
-    onSuccess: (data) => {
-      toast.success(`File berhasil dihapus.`);
+  const deletePromise = () => {
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        const res = await deleteFileById({ fileId: file.id });
 
-      queryClient.invalidateQueries({
-        queryKey: ["files", { folderName: arsipKategoriId }],
-        exact: false,
-      });
-    },
-    onError: (error) => {
-      toast.error(`Gagal menghapus file.`);
-      console.log(error);
-    },
-  });
+        queryClient.invalidateQueries({
+          queryKey: ["files", { folderName: arsipKategoriId }],
+          exact: false,
+        });
+        resolve();
+      } catch (error) {
+        reject("Gagal menghapus");
+      }
+    });
+  };
 
   const handleDelete = async () => {
     const ok = await confirm();
 
     if (!ok) return;
 
-    deleteMutation.mutate({ fileId: file.id });
+    toast.promise(deletePromise(), {
+      loading: "Menghapus...",
+      success: "Berhasil menghapus",
+      error: "Gagal menghapus",
+    });
   };
 
   return (
