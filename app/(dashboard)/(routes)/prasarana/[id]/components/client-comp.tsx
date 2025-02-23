@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import UploadMultipleModal from "./upload-multiple-modal-with-progress";
 import { ArsipKategori } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
@@ -18,16 +18,25 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { DownloadIcon } from "lucide-react";
 import axios from "axios";
+import { usePathname } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 
 type Props = {
   arsipKategoris: ArsipKategori[];
 };
 
 const ClientComp = ({ arsipKategoris }: Props) => {
+  const pathname = usePathname();
+
   const [arsipKategoriId, setArsipKategoriId] = useState(
     arsipKategoris[0]?.id || ""
   );
   const abortController = useRef<AbortController | null>(null);
+  const [kategoriCount, setKategoriCount] = useState<Record<string, number>>(
+    {}
+  );
+
+  const prasaranaId = pathname.split("/").reverse()[0];
 
   const query = useQuery({
     queryKey: ["files", { folderName: arsipKategoriId }],
@@ -93,6 +102,19 @@ const ClientComp = ({ arsipKategoris }: Props) => {
     });
   };
 
+  useEffect(() => {
+    const fetchSubFolderCount = async () => {
+      const res = await fetch(
+        `/api/files/subfolder-count?folderName=${prasaranaId ?? ""}`
+      );
+      const data = await res.json();
+
+      setKategoriCount(data);
+    };
+
+    fetchSubFolderCount();
+  }, [prasaranaId]);
+
   return (
     <div>
       {/* filter */}
@@ -112,7 +134,10 @@ const ClientComp = ({ arsipKategoris }: Props) => {
               <SelectContent>
                 {arsipKategoris.map((kategori) => (
                   <SelectItem value={kategori.id} key={kategori.id}>
-                    {kategori.nama}
+                    {kategori.nama}{" "}
+                    <Badge variant="outline" className="ml-2 text-gray-600">
+                      {kategoriCount?.[kategori.id] || 0}
+                    </Badge>
                   </SelectItem>
                 ))}
               </SelectContent>

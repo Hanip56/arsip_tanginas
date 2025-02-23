@@ -1,25 +1,30 @@
 import { CONFIG_KEY_FILE_PATH } from "@/constants/google-drive";
+import { getSubfolderItemCounts } from "@/lib/google-drive";
 import { google } from "googleapis";
+import { NextRequest, NextResponse } from "next/server";
 
-// 🔹 Load Google Drive API client
-const auth = new google.auth.GoogleAuth({
-  keyFile: CONFIG_KEY_FILE_PATH,
-  scopes: ["https://www.googleapis.com/auth/drive.metadata.readonly"],
-});
-
-const drive = google.drive({ version: "v3", auth });
-
-// 🔹 Fetch subfolders & count items
-export const getSubfolderItemCounts = async (parentFolderName: string) => {
+export async function GET(req: NextRequest) {
   try {
-    // get parentFolderId
+    const folderName = req.nextUrl.searchParams.get("folderName");
+
+    if (!folderName) {
+      return new NextResponse("folderName is required", { status: 404 });
+    }
+
+    const auth = new google.auth.GoogleAuth({
+      keyFile: CONFIG_KEY_FILE_PATH,
+      scopes: ["https://www.googleapis.com/auth/drive.metadata.readonly"],
+    });
+
+    const drive = google.drive({ version: "v3", auth });
+
     const folder = await drive.files.list({
-      q: `name = '${parentFolderName}' and mimeType = 'application/vnd.google-apps.folder' and trashed=false`,
+      q: `name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder' and trashed=false`,
       fields: "files(id)",
     });
 
     if (!folder || folder.data.files?.length === 0) {
-      throw new Error("Folder not found");
+      return new NextResponse("Folder not found", { status: 404 });
     }
 
     const parentFolderId = folder.data.files?.[0].id;
@@ -42,9 +47,11 @@ export const getSubfolderItemCounts = async (parentFolderName: string) => {
       folderData[folder.name!] = fileCount.data.files?.length || 0;
     }
 
-    return folderData;
+    console.log({ parentFolderId });
+
+    return NextResponse.json(folderData);
   } catch (error) {
-    console.error("Error fetching subfolder counts:", error);
-    return {};
+    console.log("[FILES_SUBFOLDER-COUNT_GET]", error);
+    return new NextResponse("internal error", { status: 500 });
   }
-};
+}
