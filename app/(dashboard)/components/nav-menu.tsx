@@ -25,14 +25,14 @@ const NavMenu = () => {
 
       {/* nav menu */}
       <div className="py-2 text-zinc-900">
-        <div className="flex flex-col py-2  gap-px h-[87vh] overflow-y-auto px-4">
+        <div className="flex flex-col py-2  gap-1 h-[87vh] overflow-y-auto px-4">
           {navigations.map((nav, i) =>
             nav.href && nav.type === "single" ? (
               <Link
                 key={i}
                 href={nav.href}
                 className={cn(
-                  "px-3 py-2 flex items-center gap-3 rounded-md",
+                  "p-3 flex items-center gap-3 rounded-md",
                   nav.href === shortPathname
                     ? "bg-main-2 text-white"
                     : "hover:bg-main-2/10"
@@ -90,7 +90,7 @@ const NavMenu = () => {
             ) : (
               <div
                 key={nav.subtitle}
-                className="text-xs font-semibold text-zinc-400 px-3 py-2"
+                className="text-xs font-semibold text-zinc-400 px-3"
               >
                 {nav.subtitle ?? ""}
               </div>

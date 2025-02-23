@@ -81,7 +81,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-gray-100/50 print:bg-white text-foreground;
+    @apply print:bg-white text-foreground;
   }
   /* for date picker */
   .rdp-vhidden {
@@ -101,13 +101,13 @@
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-foreground;
   }
 }
+
+/* [#F5F7FB]/30 */

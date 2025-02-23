@@ -130,7 +130,7 @@ const FileCard = ({ file, arsipKategoriId }: Props) => {
       />
       <ConfirmationDialog />
       <div className="relative w-full pt-[100%]">
-        <div className="absolute top-0 left-0 w-full h-full bg-gray-200/70 hover:bg-gray-200 transition-colors rounded-lg p-4 flex flex-col gap-4">
+        <div className="absolute top-0 left-0 w-full h-full bg-gray-100 hover:bg-gray-200 transition-colors rounded-lg p-4 flex flex-col gap-4">
           <header className="flex items-center gap-4 px-2">
             <FileTextIcon className="size-4" />
             <div className="flex-1 text-[0.925rem] font-medium line-clamp-1">

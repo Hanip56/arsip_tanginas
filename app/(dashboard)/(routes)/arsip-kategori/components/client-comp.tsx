@@ -70,7 +70,7 @@ const ClientComp = () => {
           />
           <div className="w-full justify-end md:justify-start md:w-fit flex gap-2 items-center">
             <Button variant="outline">Filter</Button>
-            <Button variant="success" onClick={() => setUpsertOpenId("new")}>
+            <Button onClick={() => setUpsertOpenId("new")}>
               <PlusIcon className="size-5 mr-2" />{" "}
               <span className="line-clamp-1">Add arsip kategori</span>
             </Button>

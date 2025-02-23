@@ -163,11 +163,8 @@ const UpsertPrasaranaDialog = ({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="gap-4">
             <div className="max-h-[70vh] overflow-y-auto p-6">
-              {/* Authentication information */}
               <div>
-                <div className="text-zinc-500 text-xs mb-1 mt-2">
-                  Authentication information
-                </div>
+                <div className="text-zinc-500 text-xs mb-1 mt-2">Deskripsi</div>
                 <div className="grid grid-cols-1 md:grid-cols-3 [&>*]:flex-1 [&>*]:w-full gap-4">
                   <FormField
                     control={form.control}
@@ -571,7 +568,7 @@ const UpsertPrasaranaDialog = ({
               </div>
             </div>
             <div className="px-6 pb-6 pt-3">
-              <Button className="w-full" disabled={isLoading} variant="success">
+              <Button className="w-full" disabled={isLoading}>
                 {initialData ? "Update" : "Create"}
               </Button>
             </div>

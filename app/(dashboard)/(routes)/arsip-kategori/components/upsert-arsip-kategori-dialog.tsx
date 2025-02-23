@@ -138,7 +138,7 @@ const UpsertKategoriModal = ({ open, handleClose, initialData }: Props) => {
               </FormItem>
             )}
           />
-          <Button disabled={isLoading} variant="success">
+          <Button disabled={isLoading}>
             {initialData ? "Rubah" : "Tambah"}
           </Button>
         </form>

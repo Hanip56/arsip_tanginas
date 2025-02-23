@@ -139,11 +139,7 @@ const ClientComp = ({ kategoris }: Props) => {
                 selectedIds={selectedIds}
                 setSelectedIds={setSelectedIds}
               /> */}
-              <Button
-                size="sm"
-                variant="success"
-                onClick={() => setUpsertOpenId("new")}
-              >
+              <Button size="sm" onClick={() => setUpsertOpenId("new")}>
                 <PlusIcon className="size-4 mr-2" />{" "}
                 <span className="line-clamp-1">Tambah prasarana</span>
               </Button>
