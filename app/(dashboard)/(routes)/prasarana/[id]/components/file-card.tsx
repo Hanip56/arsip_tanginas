@@ -11,7 +11,7 @@ import { DriveFile } from "@/types/drive";
 import { DotsVerticalIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { DownloadIcon, FileTextIcon, TrashIcon } from "lucide-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { toast } from "sonner";
 import PreviewModal from "./preview-modal";
 import { MdOpenInFull } from "react-icons/md";
@@ -19,6 +19,7 @@ import { useConfirm } from "@/hooks/use-confirm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteFileById } from "@/lib/fetcher/drive";
 import DetailModal from "./detail-modal";
+import axios from "axios";
 
 type Props = {
   file: DriveFile;
@@ -33,13 +34,26 @@ const FileCard = ({ file, arsipKategoriId }: Props) => {
     "Apa kamu yakin?",
     `Kamu akan menghapus file ini`
   );
+  const abortController = useRef<AbortController | null>(null);
 
   const downloadPromise = () => {
     return new Promise(async (resolve, reject) => {
-      try {
-        const res = await fetch(`/api/download?fileId=${file.id}`);
+      abortController.current = new AbortController();
+      const { signal } = abortController.current;
 
-        const blob = await res.blob();
+      try {
+        const res = await axios.get(`/api/download?fileId=${file.id}`, {
+          responseType: "blob",
+          signal,
+          onDownloadProgress: (progressEvent) => {
+            const percent = Math.round(
+              (progressEvent.loaded * 100) / (progressEvent.total || 1)
+            );
+            console.log(`Download Progress: ${percent}`);
+          },
+        });
+
+        const blob = new Blob([res.data], { type: file.mimeType });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
 
@@ -53,16 +67,24 @@ const FileCard = ({ file, arsipKategoriId }: Props) => {
         resolve("Downloaded");
       } catch (error) {
         console.log(error);
-        reject("Failed to download");
+        reject("Batal mengunduh");
       }
     });
+  };
+
+  const stopDownload = () => {
+    abortController.current?.abort();
   };
 
   const handleDownload = () => {
     toast.promise(downloadPromise(), {
       loading: "Downloading",
       success: "Downloaded",
-      error: "Failed to download",
+      error: "Batal mengunduh",
+      cancel: {
+        label: "Batal",
+        onClick: () => stopDownload(),
+      },
     });
   };
 

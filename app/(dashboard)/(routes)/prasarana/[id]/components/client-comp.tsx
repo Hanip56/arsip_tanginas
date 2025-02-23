@@ -8,12 +8,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import UploadMultipleModal from "./upload-multiple-modal";
 import { ArsipKategori } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { getByFolderName } from "@/lib/fetcher/drive";
 import ShowFiles from "./show-files";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { DownloadIcon } from "lucide-react";
+import axios from "axios";
 
 type Props = {
   arsipKategoris: ArsipKategori[];
@@ -23,11 +27,71 @@ const ClientComp = ({ arsipKategoris }: Props) => {
   const [arsipKategoriId, setArsipKategoriId] = useState(
     arsipKategoris[0]?.id || ""
   );
+  const abortController = useRef<AbortController | null>(null);
 
   const query = useQuery({
     queryKey: ["files", { folderName: arsipKategoriId }],
     queryFn: () => getByFolderName({ folderName: arsipKategoriId }),
   });
+
+  const downloadAllPromise = () => {
+    return new Promise(async (resolve, reject) => {
+      abortController.current = new AbortController();
+      const { signal } = abortController.current;
+
+      try {
+        const response = await axios.get(
+          `/api/files/download-folder?folderName=${arsipKategoriId}`,
+          {
+            responseType: "blob",
+            signal,
+            onDownloadProgress: (progressEvent) => {
+              const percent = Math.round(
+                (progressEvent.loaded * 100) / (progressEvent.total || 1)
+              );
+              console.log(`Download Progress: ${percent}`);
+            },
+          }
+        );
+
+        const blob = new Blob([response.data], { type: "application/zip" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+
+        a.href = url;
+        a.download = `${
+          arsipKategoris.find((v) => v.id === arsipKategoriId)?.nama
+        }.zip`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        window.URL.revokeObjectURL(url);
+        resolve("Downloaded");
+      } catch (error) {
+        console.log(error);
+        reject("Batal mengunduh");
+      }
+    });
+  };
+
+  const stopDownload = () => {
+    if (abortController.current) {
+      abortController.current.abort();
+    }
+  };
+
+  const handleDownloadFolder = () => {
+    toast.promise(downloadAllPromise(), {
+      cancel: {
+        label: "Batal",
+        onClick: () => stopDownload(),
+      },
+      loading: "Downloading",
+      success: "Downloaded",
+      error: "Batal mengunduh",
+    });
+  };
 
   return (
     <div>
@@ -80,6 +144,9 @@ const ClientComp = ({ arsipKategoris }: Props) => {
       <div className="my-8 px-2 sm:px-0">
         <div className="flex items-center justify-between">
           <h6 className="font-semibold">File</h6>
+          <Button variant="ghost" onClick={handleDownloadFolder}>
+            <DownloadIcon className="size-5 mr-2" /> Download All
+          </Button>
         </div>
 
         <ShowFiles

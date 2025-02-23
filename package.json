@@ -23,6 +23,7 @@
     "@tanstack/react-query": "^5.66.7",
     "@tanstack/react-table": "^8.21.2",
     "@types/formidable": "^3.4.5",
+    "archiver": "^7.0.1",
     "axios": "^1.7.9",
     "bcryptjs": "^3.0.1",
     "class-variance-authority": "^0.7.1",
@@ -52,6 +53,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/archiver": "^6.0.3",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.8",
     "@types/leaflet": "^1.9.16",
