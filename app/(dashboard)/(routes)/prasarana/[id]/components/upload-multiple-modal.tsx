@@ -29,9 +29,11 @@ type Props = {
   currentArsipKategoriId: string;
 };
 
-interface UploadProgress {
+export interface UploadProgress {
   fileName: string;
   progress: number;
+  status: "uploading" | "done" | "canceled";
+  abortController?: AbortController;
 }
 
 interface UploadedFile {
@@ -113,7 +115,11 @@ const UploadMultipleModal = ({
             if (foundProgressIndex !== -1) {
               newProgress[foundProgressIndex].progress = progress;
             } else {
-              newProgress.push({ fileName: file.name, progress });
+              newProgress.push({
+                fileName: file.name,
+                progress,
+                status: "uploading",
+              });
             }
 
             return newProgress;
@@ -171,7 +177,11 @@ const UploadMultipleModal = ({
             </SelectContent>
           </Select>
         </div>
-        <Dropzone disabled={isLoading} setFiles={setFiles} />
+        <Dropzone
+          uploadProgress={uploadProgress}
+          disabled={isLoading}
+          setFiles={setFiles}
+        />
       </DialogContent>
     </Dialog>
   );

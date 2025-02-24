@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import ClientComp from "./components/client-comp";
 
 const KategoriPage = async () => {
@@ -10,7 +11,9 @@ const KategoriPage = async () => {
         </h1>
       </header>
 
-      <ClientComp />
+      <Suspense>
+        <ClientComp />
+      </Suspense>
     </div>
   );
 };

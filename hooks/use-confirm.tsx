@@ -12,7 +12,7 @@ import { useState } from "react";
 export const useConfirm = (
   title: string,
   message: string
-): [() => JSX.Element, () => Promise<unknown>] => {
+): [() => React.ReactNode, () => Promise<unknown>] => {
   const [promise, setPromise] = useState<{
     resolve: (value: boolean) => void;
   } | null>(null);

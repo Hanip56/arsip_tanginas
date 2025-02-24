@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAll } from "@/lib/fetcher/prasarana";
 import { useNavigate } from "@/hooks/use-navigate";

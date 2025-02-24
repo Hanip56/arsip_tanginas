@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { PlusIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getAll } from "@/lib/fetcher/arsip-kategori";

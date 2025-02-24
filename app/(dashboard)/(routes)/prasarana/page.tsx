@@ -1,5 +1,6 @@
 import prisma from "@/lib/db";
 import ClientComp from "./components/client-comp";
+import { Suspense } from "react";
 
 const PrasaranaPage = async () => {
   const kategoris = await prisma.prasaranaKategori.findMany({});
@@ -10,7 +11,9 @@ const PrasaranaPage = async () => {
         <h1 className="text-2xl font-semibold my-1">Prasarana</h1>
       </header>
 
-      <ClientComp kategoris={kategoris} />
+      <Suspense>
+        <ClientComp kategoris={kategoris} />
+      </Suspense>
     </div>
   );
 };
