@@ -9,6 +9,11 @@ export async function GET(req: NextRequest) {
     const limit = Number(req.nextUrl.searchParams.get("limit")) || 1;
     const updatedAt = req.nextUrl.searchParams.get("updatedAt") || "desc";
     const search = req.nextUrl.searchParams.get("search") || "";
+    const kategoriId = req.nextUrl.searchParams.get("kategoriId") || "";
+    const jenisLahan = req.nextUrl.searchParams.get("jenisLahan") || "";
+    const kecamatan = req.nextUrl.searchParams.get("kecamatan") || "";
+    const status = req.nextUrl.searchParams.get("status") || "";
+    const tahun = req.nextUrl.searchParams.get("tahun") || "";
 
     let orderBy: Record<string, string> = {};
 
@@ -20,6 +25,11 @@ export async function GET(req: NextRequest) {
 
     const where: Prisma.PrasaranaWhereInput = {
       nama: { contains: search, mode: "insensitive" },
+      kategoriId: kategoriId || undefined,
+      jenisLahan: jenisLahan || undefined,
+      kecamatan: kecamatan || undefined,
+      tahunAnggaran: tahun || undefined,
+      status: status || undefined,
     };
 
     const total_items = await prisma.prasarana.count({

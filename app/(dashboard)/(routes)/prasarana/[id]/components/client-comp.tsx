@@ -39,8 +39,15 @@ const ClientComp = ({ arsipKategoris }: Props) => {
   const prasaranaId = pathname.split("/").reverse()[0];
 
   const query = useQuery({
-    queryKey: ["files", { folderName: arsipKategoriId }],
-    queryFn: () => getByFolderName({ folderName: arsipKategoriId }),
+    queryKey: [
+      "files",
+      { folderName: arsipKategoriId, parentFolderName: prasaranaId },
+    ],
+    queryFn: () =>
+      getByFolderName({
+        folderName: arsipKategoriId,
+        parentFolderName: prasaranaId,
+      }),
   });
 
   const downloadAllPromise = () => {
@@ -143,7 +150,7 @@ const ClientComp = ({ arsipKategoris }: Props) => {
               </SelectContent>
             </Select>
           </div>
-          <div>
+          {/* <div>
             <Label className="text-zinc-500 text-xs block mb-2">Urutkan</Label>
             <Select>
               <SelectTrigger className="w-40">
@@ -153,7 +160,7 @@ const ClientComp = ({ arsipKategoris }: Props) => {
                 <SelectItem value="test">Test</SelectItem>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
           {/* <SelectWithLabel
             label="Urutkan"
             value={"semua"}

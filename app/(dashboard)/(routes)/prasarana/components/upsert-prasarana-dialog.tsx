@@ -432,12 +432,22 @@ const UpsertPrasaranaDialog = ({
                       <FormItem>
                         <FormLabel className="text-xs">Satuan</FormLabel>
                         <FormControl>
-                          <Input
-                            className="text-xs placeholder:text-xs"
-                            {...field}
-                            disabled={isLoading}
-                            placeholder="Masukan satuan"
-                          />
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Pilih status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Unit" className="text-xs">
+                                Unit
+                              </SelectItem>
+                              <SelectItem value="Meter" className="text-xs">
+                                Meter
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -458,14 +468,14 @@ const UpsertPrasaranaDialog = ({
                               <SelectValue placeholder="Pilih status" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="TERBANGUN" className="text-xs">
-                                TERBANGUN
+                              <SelectItem value="Terbangun" className="text-xs">
+                                Terbangun
                               </SelectItem>
                               <SelectItem
-                                value="TIDAK TERBANGUN"
+                                value="Tidak Terbangun"
                                 className="text-xs"
                               >
-                                TIDAK TERBANGUN
+                                Tidak Terbangun
                               </SelectItem>
                             </SelectContent>
                           </Select>

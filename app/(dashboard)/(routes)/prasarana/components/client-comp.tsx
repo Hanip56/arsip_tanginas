@@ -13,19 +13,38 @@ import { PrasaranaKategori } from "@prisma/client";
 import qs from "query-string";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, XIcon } from "lucide-react";
 import UpsertPrasaranaDialog from "./upsert-prasarana-dialog";
+import SelectWithLabel from "@/components/ui/select-with-label";
+import usePushQuery from "@/hooks/use-push-query";
+import { daftarTahunAnggaran, kecamatans } from "@/constants";
+import { toRupiah } from "@/lib/utils";
+import BulkAction from "./bulk-action";
 
 type Props = {
   kategoris: PrasaranaKategori[];
 };
 
+const filterParams = [
+  "search",
+  "jenisLahan",
+  "kecamatan",
+  "status",
+  "tahunAnggaran",
+  "kategoriId",
+];
+
 const ClientComp = ({ kategoris }: Props) => {
   const [upsertOpenId, setUpsertOpenId] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const pushQuery = usePushQuery();
 
   const params = qs.parse(useSearchParams().toString());
   const kategoriId = (params?.kategoriId as string) ?? "";
+  const kecamatanParam = (params?.kecamatan as string) ?? "";
+  const jenisLahanParam = (params?.jenisLahan as string) ?? "";
+  const statusParam = (params?.status as string) ?? "";
+  const tahunParam = (params?.tahunAnggaran as string) ?? "";
   const {
     page,
     handleNext,
@@ -39,7 +58,20 @@ const ClientComp = ({ kategoris }: Props) => {
   } = useNavigate();
 
   const query = useQuery({
-    queryKey: ["prasaranas", { page, search, limit, kategoriId, updatedAt }],
+    queryKey: [
+      "prasaranas",
+      {
+        page,
+        search,
+        limit,
+        kategoriId,
+        updatedAt,
+        kecamatan: kecamatanParam,
+        jenisLahan: jenisLahanParam,
+        status: statusParam,
+        tahun: tahunParam,
+      },
+    ],
     queryFn: () =>
       getAll({
         limit,
@@ -47,6 +79,10 @@ const ClientComp = ({ kategoris }: Props) => {
         search,
         updatedAt,
         kategoriId,
+        kecamatan: kecamatanParam,
+        jenisLahan: jenisLahanParam,
+        status: statusParam,
+        tahun: tahunParam,
       }),
     placeholderData: (prev) => prev,
   });
@@ -64,11 +100,23 @@ const ClientComp = ({ kategoris }: Props) => {
     id: prasarana.id,
     nama: prasarana.nama,
     kategori: prasarana.kategori.nama,
+    poktan: prasarana.poktan,
+    alamat: prasarana.alamat,
+    desa: prasarana.desa,
+    tahunAnggaran: prasarana.tahunAnggaran,
+    volume: prasarana.volume,
+    satuan: prasarana.satuan,
+    longitude: prasarana.longitude,
+    latitude: prasarana.latitude,
+    sumberAnggaran: prasarana.sumberAnggaran,
     jenisLahan: prasarana.jenisLahan,
     status: prasarana.status,
     kecamatan: prasarana.kecamatan,
-    tahunAnggaran: prasarana.tahunAnggaran,
+    bpp: prasarana.bpp,
+    nilaiAnggaran: toRupiah(prasarana.nilaiAnggaran),
   }));
+
+  const isFiltering = Object.keys(params).some((v) => filterParams.includes(v));
 
   return (
     <>
@@ -79,71 +127,139 @@ const ClientComp = ({ kategoris }: Props) => {
         kategoris={kategoris}
       />
       <main>
-        <div className="w-full flex flex-wrap gap-x-4 gap-y-2 items-center">
+        <div className="w-full flex flex-wrap gap-x-4 gap-y-2 items-center justify-between">
           <div className="w-full md:max-w-xs space-y-1">
-            <Label className="text-zinc-500 text-xs">Search Student</Label>
+            <Label className="text-zinc-500 text-xs">Cari prasarana</Label>
             <Input
               value={search}
               onChange={handleSearch}
-              className="w-full bg-white"
-              placeholder="Search student by name"
+              className="w-full bg-white text-xs"
+              placeholder="Cari nama prasarana"
             />
           </div>
-          {/* <SelectWithLabel
-            label="Class"
-            value={classId ?? undefined}
-            items={[
-              { label: "All", value: "_" },
-              { label: "Not Assigned", value: "none" },
-              ...classes.map((c) => ({ label: c.name, value: c.id })),
-            ]}
-            onValueChange={(e) =>
-              pushQuery({ classId: e !== "_" ? e : undefined })
-            }
-            placeholder="All"
-          />
-          <SelectWithLabel
-            label="Limit"
-            value={limit.toString()}
-            items={[
-              { label: "10", value: "10" },
-              { label: "20", value: "20" },
-              { label: "50", value: "50" },
-            ]}
-            onValueChange={(e) => handleLimit(+e)}
-            placeholder="limit"
-          />
-          <SelectWithLabel
-            label="Order"
-            value={updatedAt}
-            items={[
-              { label: "Oldest", value: "asc" },
-              { label: "Latest", value: "desc" },
-            ]}
-            onValueChange={(e) => pushQuery({ updatedAt: e })}
-            placeholder="desc"
-          /> */}
-          {/* <div className="w-fit space-y-1">
-            <Label className="text-zinc-500 text-xs">Exports</Label>
-            <ExportButtons data={dataTable} />
-          </div> */}
+          <Button
+            className="self-end"
+            size="sm"
+            onClick={() => setUpsertOpenId("new")}
+          >
+            <PlusIcon className="size-4 mr-2" />{" "}
+            <span className="line-clamp-1">Tambah prasarana</span>
+          </Button>
         </div>
 
         {/* data-table */}
         <div className="my-4">
           <div>
-            <div className="py-2 border-t flex flex-col sm:flex-row gap-2 items-center justify-between">
-              {/* <BulkStudentButtons
-                assignedStudentIds={assignedStudentIds}
-                unassignedStudentIds={unassignedStudentIds}
+            <div className="py-4 border-t flex flex-col sm:flex-row gap-2 items-center">
+              {/* <BulkAction
                 selectedIds={selectedIds}
                 setSelectedIds={setSelectedIds}
               /> */}
-              <Button size="sm" onClick={() => setUpsertOpenId("new")}>
+              {/* <Button size="sm" onClick={() => setUpsertOpenId("new")}>
                 <PlusIcon className="size-4 mr-2" />{" "}
                 <span className="line-clamp-1">Tambah prasarana</span>
-              </Button>
+              </Button> */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <SelectWithLabel
+                  withLabel={false}
+                  label="jenis Prasarana"
+                  value={kategoriId ?? undefined}
+                  items={[
+                    { label: "Semua", value: "_" },
+                    ...kategoris.map((kategori) => ({
+                      label: kategori.nama,
+                      value: kategori.id,
+                    })),
+                  ]}
+                  onValueChange={(e) =>
+                    pushQuery({ kategoriId: e !== "_" ? e : undefined })
+                  }
+                  placeholder="Semua jenis"
+                />
+                <SelectWithLabel
+                  withLabel={false}
+                  label="Kecamatan"
+                  value={kecamatanParam ?? undefined}
+                  items={[
+                    { label: "Semua", value: "_" },
+                    ...kecamatans.map((kecamatan) => ({
+                      label: kecamatan,
+                      value: kecamatan,
+                    })),
+                  ]}
+                  onValueChange={(e) =>
+                    pushQuery({ kecamatan: e !== "_" ? e : undefined })
+                  }
+                  placeholder="Semua kecamatan"
+                />
+                <SelectWithLabel
+                  withLabel={false}
+                  label="Jenis Lahan"
+                  value={jenisLahanParam ?? undefined}
+                  items={[
+                    { label: "Semua", value: "_" },
+                    { label: "LSD", value: "LSD" },
+                    { label: "BUKAN LSD", value: "BUKAN LSD" },
+                  ]}
+                  onValueChange={(e) =>
+                    pushQuery({ jenisLahan: e !== "_" ? e : undefined })
+                  }
+                  placeholder="Semua jenis"
+                />
+                <SelectWithLabel
+                  withLabel={false}
+                  label="Kondisi"
+                  value={statusParam ?? undefined}
+                  items={[
+                    { label: "Semua", value: "_" },
+                    { label: "Terbangun", value: "Terbangun" },
+                    { label: "Tidak Terbangun", value: "Tidak Terbangun" },
+                  ]}
+                  onValueChange={(e) =>
+                    pushQuery({ status: e !== "_" ? e : undefined })
+                  }
+                  placeholder="Semua kondisi"
+                />
+                <SelectWithLabel
+                  withLabel={false}
+                  label="Tahun"
+                  value={tahunParam ?? undefined}
+                  items={[
+                    { label: "Semua", value: "_" },
+                    ...daftarTahunAnggaran.map((tahunAnggaran) => ({
+                      label: tahunAnggaran,
+                      value: tahunAnggaran,
+                    })),
+                  ]}
+                  onValueChange={(e) =>
+                    pushQuery({ tahunAnggaran: e !== "_" ? e : undefined })
+                  }
+                  placeholder="Semua tahun"
+                />
+                {isFiltering && (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => {
+                      const obj = Object.fromEntries(
+                        filterParams.map((v) => [v, undefined])
+                      );
+                      pushQuery(obj);
+                    }}
+                  >
+                    <XIcon className="size-4 mr-2" /> Hapus Filter
+                  </Button>
+                )}
+              </div>
             </div>
+            {selectedIds.length > 0 && (
+              <div className="py-4 border-t">
+                <BulkAction
+                  selectedIds={selectedIds}
+                  setSelectedIds={setSelectedIds}
+                />
+              </div>
+            )}
             <DataTable
               columns={columns({
                 setUpsertOpenId,

@@ -39,7 +39,7 @@ const LoginForm = () => {
           setError(data.error);
         } else if (data?.success) {
           toastSuccess(
-            "Welcome back!",
+            "Welcome!",
             "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rerum, animi?"
           );
           window.location.href = "/";
@@ -94,7 +94,7 @@ const LoginForm = () => {
         <div className="my-1">
           <FormError message={error} />
         </div>
-        <Button disabled={disabledCondition}>Login</Button>
+        <Button disabled={disabledCondition}>Masuk</Button>
       </form>
     </Form>
   );

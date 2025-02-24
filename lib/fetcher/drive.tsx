@@ -5,6 +5,7 @@ import { DriveFile } from "@/types/drive";
 
 type GetByFolderNameParams = {
   folderName: string;
+  parentFolderName: string;
 };
 
 type GetByFolderNameResponse = {
@@ -13,6 +14,7 @@ type GetByFolderNameResponse = {
 
 export const getByFolderName = async ({
   folderName,
+  parentFolderName,
 }: GetByFolderNameParams) => {
   try {
     const response = await axiosInstance.get<GetByFolderNameResponse>(
@@ -20,6 +22,7 @@ export const getByFolderName = async ({
       {
         params: {
           folderName,
+          parentFolderName,
         },
       }
     );

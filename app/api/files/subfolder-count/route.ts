@@ -1,5 +1,4 @@
 import { CONFIG_KEY_FILE_PATH } from "@/constants/google-drive";
-import { getSubfolderItemCounts } from "@/lib/google-drive";
 import { google } from "googleapis";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -46,8 +45,6 @@ export async function GET(req: NextRequest) {
 
       folderData[folder.name!] = fileCount.data.files?.length || 0;
     }
-
-    console.log({ parentFolderId });
 
     return NextResponse.json(folderData);
   } catch (error) {

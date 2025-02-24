@@ -10,6 +10,10 @@ type GetAllParams = {
   kategoriId: string;
   search?: string;
   updatedAt?: string;
+  kecamatan?: string;
+  jenisLahan?: string;
+  status?: string;
+  tahun?: string;
 };
 
 type GetAllResponse = {
@@ -25,6 +29,10 @@ export const getAll = async ({
   search,
   updatedAt,
   kategoriId,
+  jenisLahan,
+  kecamatan,
+  status,
+  tahun,
 }: GetAllParams) => {
   try {
     const response = await axiosInstance.get<GetAllResponse>("/prasarana", {
@@ -34,6 +42,10 @@ export const getAll = async ({
         search,
         updatedAt,
         kategoriId,
+        jenisLahan,
+        kecamatan,
+        status,
+        tahun,
       },
     });
 

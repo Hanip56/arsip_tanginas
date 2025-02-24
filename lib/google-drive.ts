@@ -4,10 +4,32 @@ import { google } from "googleapis";
 // 🔹 Load Google Drive API client
 const auth = new google.auth.GoogleAuth({
   keyFile: CONFIG_KEY_FILE_PATH,
-  scopes: ["https://www.googleapis.com/auth/drive.metadata.readonly"],
+  scopes: ["https://www.googleapis.com/auth/drive"],
 });
 
 const drive = google.drive({ version: "v3", auth });
+
+export const deleteDriveFolders = async (folderNames: string[]) => {
+  try {
+    for (const folderName of folderNames) {
+      const folder = await drive.files.list({
+        q: `name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder' and trashed=false`,
+        fields: "files(id)",
+      });
+
+      if (folder.data.files && folder.data.files?.length > 0) {
+        const res = await drive.files.update({
+          fileId: folder.data.files[0].id!,
+          requestBody: { trashed: true },
+        });
+      }
+    }
+
+    return { success: true };
+  } catch (error) {
+    return { success: false };
+  }
+};
 
 // 🔹 Fetch subfolders & count items
 export const getSubfolderItemCounts = async (parentFolderName: string) => {

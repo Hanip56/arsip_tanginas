@@ -51,7 +51,7 @@ const CellAction: React.FC<CellActionProps> = ({ data, handleOpenUpdate }) => {
     <>
       <ConfirmationDialog />
       <RowOptionGeneral
-        detailHref={`kategori/${data.id}`}
+        detailHref={``}
         handleUpdate={() => handleOpenUpdate(data.id)}
         handleDelete={handleDelete}
       />

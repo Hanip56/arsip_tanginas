@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { deleteDriveFolders } from "@/lib/google-drive";
 import { checkIsAdmin } from "@/lib/server-utils";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -21,6 +22,12 @@ export async function POST(req: NextRequest) {
         },
       },
     });
+
+    const { success } = await deleteDriveFolders(ids);
+
+    if (!success) {
+      console.log("Failed to delete folders in google drive");
+    }
 
     return NextResponse.json({ message: "Delete prasarana sucessfully." });
   } catch (error) {

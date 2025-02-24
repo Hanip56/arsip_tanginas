@@ -16,6 +16,7 @@ type Props = {
   items: { value: string; label: string }[];
   containerClassName?: string;
   disabled?: boolean;
+  withLabel?: boolean;
 };
 
 const SelectWithLabel = ({
@@ -26,17 +27,20 @@ const SelectWithLabel = ({
   placeholder,
   containerClassName,
   disabled = false,
+  withLabel = true,
 }: Props) => {
   return (
     <div className={cn("w-fit space-y-1", containerClassName)}>
-      <Label className="text-zinc-500 text-xs">{label}</Label>
+      {withLabel && (
+        <Label className="text-zinc-500 text-[.7rem]">{label}</Label>
+      )}
       <Select value={value} onValueChange={onValueChange} disabled={disabled}>
-        <SelectTrigger className="bg-white">
+        <SelectTrigger className="bg-white text-xs gap-4">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent className="max-h-56 overflow-y-auto">
           {items.map((item, i) => (
-            <SelectItem key={i} value={item.value}>
+            <SelectItem key={i} value={item.value} className="text-xs">
               {item.label}
             </SelectItem>
           ))}

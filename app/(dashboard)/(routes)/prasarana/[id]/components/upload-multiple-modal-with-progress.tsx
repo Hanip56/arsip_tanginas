@@ -83,6 +83,10 @@ const UploadMultipleModal = ({
   };
 
   useEffect(() => {
+    setArsipKategoriId(currentArsipKategoriId);
+  }, [currentArsipKategoriId]);
+
+  useEffect(() => {
     handleUpload();
   }, [files]);
 

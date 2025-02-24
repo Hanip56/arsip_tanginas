@@ -10,12 +10,24 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown, LogOutIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { logout } from "@/actions/logout";
+import { useRouter } from "next/navigation";
 
 const NavMenu = () => {
   const pathname = usePathname();
+  const router = useRouter();
 
   const shortPathname = pathname.split("/").slice(0, 2).join("/");
+
+  const handleLogout = async () => {
+    const { success } = await logout();
+
+    if (success) {
+      router.refresh();
+    }
+  };
 
   return (
     <div className="h-full w-full">
@@ -24,8 +36,8 @@ const NavMenu = () => {
       </div>
 
       {/* nav menu */}
-      <div className="py-2 text-zinc-900">
-        <div className="flex flex-col py-2  gap-1 h-[87vh] overflow-y-auto px-4">
+      <div className="py-2 text-zinc-900 flex flex-col justify-between h-[90vh]">
+        <div className="flex flex-col py-2  gap-1 overflow-y-auto px-4">
           {navigations.map((nav, i) =>
             nav.href && nav.type === "single" ? (
               <Link
@@ -96,6 +108,11 @@ const NavMenu = () => {
               </div>
             )
           )}
+        </div>
+        <div className="p-4 w-full">
+          <Button onClick={handleLogout} variant="ghost" className="w-full">
+            <LogOutIcon className="size-5 mr-2" /> Logout
+          </Button>
         </div>
       </div>
     </div>

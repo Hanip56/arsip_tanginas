@@ -5,7 +5,7 @@ const OverviewPage = () => {
     <div className="container-dashboard">
       <header>
         <p className="font-medium">✨ Overview</p>
-        <h1 className="text-3xl font-semibold my-1">Absensi Web App</h1>
+        <h1 className="text-3xl font-semibold my-1">Arsip Dashboard</h1>
       </header>
     </div>
   );

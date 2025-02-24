@@ -4,8 +4,8 @@ import { useConfirm } from "@/hooks/use-confirm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { deleteMultiple } from "@/lib/fetcher/prasarana";
-import RowOptionGeneral from "@/components/row-option-general";
 import { ColumnType } from "./columns";
+import RowOptionPrasarana from "@/components/row-option-prasarana";
 
 type CellActionProps = {
   data: ColumnType;
@@ -50,7 +50,7 @@ const CellAction: React.FC<CellActionProps> = ({ data, handleOpenUpdate }) => {
   return (
     <>
       <ConfirmationDialog />
-      <RowOptionGeneral
+      <RowOptionPrasarana
         detailHref={`prasarana/${data.id}`}
         handleUpdate={() => handleOpenUpdate(data.id)}
         handleDelete={handleDelete}
