@@ -1,9 +1,9 @@
-import { CONFIG_KEY_FILE_PATH } from "@/constants/google-drive";
+import { CONFIG_GOOGLE_CREDENTIALS } from "@/constants/google-drive";
 import { google } from "googleapis";
 
 // 🔹 Load Google Drive API client
 const auth = new google.auth.GoogleAuth({
-  keyFile: CONFIG_KEY_FILE_PATH,
+  credentials: CONFIG_GOOGLE_CREDENTIALS,
   scopes: ["https://www.googleapis.com/auth/drive"],
 });
 

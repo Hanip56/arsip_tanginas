@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { CONFIG_KEY_FILE_PATH } from "@/constants/google-drive";
+import { CONFIG_GOOGLE_CREDENTIALS } from "@/constants/google-drive";
 import { google } from "googleapis";
 
 export async function GET(req: NextRequest) {
@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
     }
 
     const auth = new google.auth.GoogleAuth({
-      keyFile: CONFIG_KEY_FILE_PATH,
+      credentials: CONFIG_GOOGLE_CREDENTIALS,
       scopes: ["https://www.googleapis.com/auth/drive"],
     });
 
