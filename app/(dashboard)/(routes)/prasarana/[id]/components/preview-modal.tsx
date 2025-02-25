@@ -1,5 +1,6 @@
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -31,7 +32,7 @@ const PreviewModal = ({
     <Dialog open={openModal} onOpenChange={handleChange}>
       <DialogContent className="bg-transparent max-w-[100%] h-screen border-none text-white">
         <DialogHeader>
-          <DialogTitle>Preview file</DialogTitle>
+          <DialogTitle className="text-start">Preview file</DialogTitle>
         </DialogHeader>
         <FileViewer file={file} previewUrl={previewUrl} />
       </DialogContent>
