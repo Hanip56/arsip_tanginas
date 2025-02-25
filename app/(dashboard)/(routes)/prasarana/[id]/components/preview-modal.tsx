@@ -56,6 +56,7 @@ const FileViewer = ({
         width={5000}
         height={5000}
         className="w-[90vw] h-[90vh] object-contain"
+        unoptimized
       />
     );
 
