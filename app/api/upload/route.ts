@@ -1,11 +1,10 @@
 import { google } from "googleapis";
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
 import { Readable } from "stream";
-import { PARENT_FOLDER_ID } from "@/constants/google-drive";
-
-// Load Google Service Account credentials
-const KEY_FILE_PATH = path.join(process.cwd(), "config/service-account.json");
+import {
+  CONFIG_GOOGLE_CREDENTIALS,
+  PARENT_FOLDER_ID,
+} from "@/constants/google-drive";
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,7 +26,7 @@ export async function POST(req: NextRequest) {
 
     // Authenticate with Google Service Account
     const auth = new google.auth.GoogleAuth({
-      keyFile: KEY_FILE_PATH,
+      credentials: CONFIG_GOOGLE_CREDENTIALS,
       scopes: ["https://www.googleapis.com/auth/drive.file"],
     });
 
