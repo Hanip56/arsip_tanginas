@@ -57,7 +57,7 @@ const ClientComp = ({ arsipKategoris }: Props) => {
 
       try {
         const response = await axios.get(
-          `/api/files/download-folder?folderName=${arsipKategoriId}`,
+          `/api/files/download-folder?folderName=${arsipKategoriId}&parentFolderName=${prasaranaId}`,
           {
             responseType: "blob",
             signal,
