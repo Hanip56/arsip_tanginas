@@ -67,7 +67,7 @@ const FileCard = ({ file, arsipKategoriId }: Props) => {
         resolve("Downloaded");
       } catch (error) {
         console.log(error);
-        reject("Batal mengunduh");
+        reject("Gagal mengunduh");
       }
     });
   };
@@ -80,7 +80,7 @@ const FileCard = ({ file, arsipKategoriId }: Props) => {
     toast.promise(downloadPromise(), {
       loading: "Downloading",
       success: "Downloaded",
-      error: "Batal mengunduh",
+      error: "Gagal mengunduh",
       cancel: {
         label: "Batal",
         onClick: () => stopDownload(),

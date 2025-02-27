@@ -18,8 +18,9 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { DownloadIcon } from "lucide-react";
 import axios from "axios";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import usePushQuery from "@/hooks/use-push-query";
 
 type Props = {
   arsipKategoris: ArsipKategori[];
@@ -27,16 +28,17 @@ type Props = {
 
 const ClientComp = ({ arsipKategoris }: Props) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const pushQuery = usePushQuery();
 
-  const [arsipKategoriId, setArsipKategoriId] = useState(
-    arsipKategoris[0]?.id || ""
-  );
   const abortController = useRef<AbortController | null>(null);
   const [kategoriCount, setKategoriCount] = useState<Record<string, number>>(
     {}
   );
 
   const prasaranaId = pathname.split("/").reverse()[0];
+  const arsipKategoriId =
+    searchParams.get("arsipKategoriId") || arsipKategoris[0]?.id || "";
 
   const query = useQuery({
     queryKey: [
@@ -86,7 +88,7 @@ const ClientComp = ({ arsipKategoris }: Props) => {
         resolve("Downloaded");
       } catch (error) {
         console.log(error);
-        reject("Batal mengunduh");
+        reject("Gagal mengunduh");
       }
     });
   };
@@ -105,7 +107,7 @@ const ClientComp = ({ arsipKategoris }: Props) => {
       },
       loading: "Downloading",
       success: "Downloaded",
-      error: "Batal mengunduh",
+      error: "Gagal mengunduh",
     });
   };
 
@@ -133,7 +135,7 @@ const ClientComp = ({ arsipKategoris }: Props) => {
             </Label>
             <Select
               value={arsipKategoriId}
-              onValueChange={(e) => setArsipKategoriId(e)}
+              onValueChange={(e) => pushQuery({ arsipKategoriId: e })}
             >
               <SelectTrigger className="w-80">
                 <SelectValue placeholder="Arsip kategori" />

@@ -23,3 +23,33 @@ export const RegisterSchema = z.object({
     message: "Minimum password confirmation is required",
   }),
 });
+
+export const generateRegisterSchema = (type: "CREATE" | "UPDATE") => {
+  if (type === "UPDATE") {
+    return z.object({
+      username: z.string().min(3, {
+        message: "Minimum username is 3 characters",
+      }),
+      email: z.string().email({
+        message: "Email is not valid",
+      }),
+      password: z.string().optional(),
+      passwordConfirmation: z.string().optional(),
+    });
+  }
+
+  return z.object({
+    username: z.string().min(3, {
+      message: "Minimum username is 3 characters",
+    }),
+    email: z.string().email({
+      message: "Email is not valid",
+    }),
+    password: z.string().min(6, {
+      message: "Minimum password is 6 characters",
+    }),
+    passwordConfirmation: z.string().min(1, {
+      message: "Minimum password confirmation is required",
+    }),
+  });
+};

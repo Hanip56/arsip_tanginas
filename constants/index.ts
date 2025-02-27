@@ -1,7 +1,7 @@
 import { IconType } from "react-icons/lib";
 import { RiDashboardLine } from "react-icons/ri";
-import { MdCategory, MdOutlineCategory } from "react-icons/md";
-import { PiBuildingOffice } from "react-icons/pi";
+import { MdCategory, MdOutlineCategory, MdPerson } from "react-icons/md";
+import { PiBuildingOffice, PiFileArchive } from "react-icons/pi";
 
 type NavType = {
   label: string;
@@ -31,6 +31,22 @@ export const navigations: NavListType[] = [
   },
   {
     type: "single",
+    label: "Prasarana",
+    href: "/prasarana",
+    icon: PiBuildingOffice,
+  },
+  {
+    type: "single",
+    label: "Files",
+    href: "/files",
+    icon: PiFileArchive,
+  },
+  {
+    type: "subtitle",
+    subtitle: "Kategori",
+  },
+  {
+    type: "single",
     label: "Kategori Prasarana",
     href: "/kategori",
     icon: MdOutlineCategory,
@@ -42,10 +58,14 @@ export const navigations: NavListType[] = [
     icon: MdCategory,
   },
   {
+    type: "subtitle",
+    subtitle: "Pengguna",
+  },
+  {
     type: "single",
-    label: "Prasarana",
-    href: "/prasarana",
-    icon: PiBuildingOffice,
+    label: "Kelola Pengguna",
+    href: "/user",
+    icon: MdPerson,
   },
 ];
 

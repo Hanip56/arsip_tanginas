@@ -111,6 +111,10 @@ const UpsertPrasaranaDialog = ({
       form.setValue("longitude", initialData.longitude);
       form.setValue("latitude", initialData.latitude);
       form.setValue("bpp", initialData.bpp);
+      setMapPosition([
+        parseFloat(initialData.latitude),
+        parseFloat(initialData.longitude),
+      ]);
     }
   }, [initialData, form]);
 
@@ -151,8 +155,6 @@ const UpsertPrasaranaDialog = ({
 
     setIsLoading(false);
   };
-
-  console.log(mapPosition.toString().split(","));
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && handleClose()}>

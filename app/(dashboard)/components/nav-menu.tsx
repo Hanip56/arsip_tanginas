@@ -102,7 +102,7 @@ const NavMenu = () => {
             ) : (
               <div
                 key={nav.subtitle}
-                className="text-xs font-semibold text-zinc-400 px-3"
+                className="text-xs font-medium text-zinc-400 px-3 pt-2"
               >
                 {nav.subtitle ?? ""}
               </div>
