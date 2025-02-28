@@ -6,13 +6,13 @@ export async function GET(req: NextRequest) {
     const userId = req.nextUrl.searchParams.get("id");
 
     if (!userId) {
-      return new NextResponse("userId not found", { status: 400 });
+      return new NextResponse("userId tidak ditemukan", { status: 400 });
     }
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
-      return new NextResponse("User not found", { status: 404 });
+      return new NextResponse("User tidak ditemukan", { status: 404 });
     }
 
     return NextResponse.json({ message: "User exist" }, { status: 200 });

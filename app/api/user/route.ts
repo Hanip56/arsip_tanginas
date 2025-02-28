@@ -1,9 +1,15 @@
 import prisma from "@/lib/db";
+import { checkIsAdmin } from "@/lib/server-utils";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
+    const isAdmin = await checkIsAdmin();
+
+    if (!isAdmin) {
+      return new NextResponse("Forbidden", { status: 403 });
+    }
     const page = Number(req.nextUrl.searchParams.get("page")) || 1;
     const limit = Number(req.nextUrl.searchParams.get("limit")) || 1;
     const updatedAt = req.nextUrl.searchParams.get("updatedAt") || "desc";

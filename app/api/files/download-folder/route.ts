@@ -10,10 +10,10 @@ export async function GET(req: NextRequest) {
     const parentFolderName = req.nextUrl.searchParams.get("parentFolderName"); // prasaranaId
 
     if (!parentFolderName) {
-      return new NextResponse("parentFolderName is required", { status: 400 });
+      return new NextResponse("parentFolderName harus diisi", { status: 400 });
     }
     if (!folderName) {
-      return new NextResponse("folderName is required", { status: 400 });
+      return new NextResponse("folderName harus diisi", { status: 400 });
     }
 
     const auth = new google.auth.GoogleAuth({
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!parentFolder || parentFolder.data.files?.length === 0) {
-      return new NextResponse("Folder not found", { status: 404 });
+      return new NextResponse("Folder tidak ditemukan", { status: 404 });
     }
 
     const parentFolderId = parentFolder.data.files?.[0].id;
@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!folder || folder.data.files?.length === 0) {
-      return new NextResponse("Folder not found", { status: 404 });
+      return new NextResponse("Folder tidak ditemukan", { status: 404 });
     }
 
     const folderId = folder.data.files?.[0].id;
@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
     const files = fileList.data.files || [];
 
     if (files.length === 0) {
-      return new NextResponse("File not found", { status: 404 });
+      return new NextResponse("File tidak ditemukan", { status: 404 });
     }
 
     // Create a ZIP archive and a stream

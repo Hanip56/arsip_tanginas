@@ -14,8 +14,10 @@ import { ChevronsUpDown, LogOutIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { logout } from "@/actions/logout";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const NavMenu = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -38,7 +40,7 @@ const NavMenu = () => {
       {/* nav menu */}
       <div className="py-2 text-zinc-900 flex flex-col justify-between h-[90vh]">
         <div className="flex flex-col py-2  gap-1 overflow-y-auto px-4">
-          {navigations.map((nav, i) =>
+          {navigations(session?.user.role !== "USER").map((nav, i) =>
             nav.href && nav.type === "single" ? (
               <Link
                 key={i}

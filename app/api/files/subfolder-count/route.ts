@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
     const folderName = req.nextUrl.searchParams.get("folderName");
 
     if (!folderName) {
-      return new NextResponse("folderName is required", { status: 404 });
+      return new NextResponse("folderName harus diisi", { status: 404 });
     }
 
     const auth = new google.auth.GoogleAuth({
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!folder || folder.data.files?.length === 0) {
-      return new NextResponse("Folder not found", { status: 404 });
+      return new NextResponse("Folder tidak ditemukan", { status: 404 });
     }
 
     const parentFolderId = folder.data.files?.[0].id;

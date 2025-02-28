@@ -31,8 +31,9 @@ const CellAction: React.FC<CellActionProps> = ({ data, handleOpenUpdate }) => {
         exact: false,
       });
     },
-    onError: (error) => {
-      toast(`Failed to delete user.`, {
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data || "Gagal menghapus user";
+      toast(errorMessage, {
         className: "text-rose-600 font-semibold",
       });
       console.log(error);

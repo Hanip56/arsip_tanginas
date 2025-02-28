@@ -148,9 +148,11 @@ const UpsertPrasaranaDialog = ({
       form.reset();
       queryClient.invalidateQueries({ queryKey: ["prasaranas"], exact: false });
       handleClose();
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      toast.error("Gagal membuat prasarana");
+      const errorMessage =
+        error?.response?.data || error?.message || "Gagal membuat prasarana";
+      toast.error(errorMessage);
     }
 
     setIsLoading(false);

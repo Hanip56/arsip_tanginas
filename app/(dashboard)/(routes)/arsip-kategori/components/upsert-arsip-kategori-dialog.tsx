@@ -84,9 +84,10 @@ const UpsertKategoriModal = ({ open, handleClose, initialData }: Props) => {
         exact: false,
       });
       handleClose();
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      toast.error("Gagal membuat kategori");
+      const errorMessage = error?.response?.data || "Gagal membuat kategori";
+      toast.error(errorMessage);
     }
 
     setIsLoading(false);

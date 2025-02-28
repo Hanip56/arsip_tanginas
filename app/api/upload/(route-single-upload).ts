@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     const file = formData.get("file") as File;
 
     if (!file) {
-      return new NextResponse("No file uploaded", { status: 400 });
+      return new NextResponse("Tidak ada file uploaded", { status: 400 });
     }
 
     // Convert file to buffer

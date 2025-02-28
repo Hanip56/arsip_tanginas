@@ -73,9 +73,10 @@ const UploadMultipleModal = ({
       queryClient.invalidateQueries({
         queryKey: ["files", { folderName: arsipKategoriId }],
       });
-    } catch (error) {
+    } catch (error: any) {
+      const errorMessage = error?.response?.data || "Gagal Mengupload file";
       console.log(error);
-      toast.error("Failed to upload file");
+      toast.error(errorMessage);
     } finally {
       setIsUploading(false);
       setFiles(undefined);

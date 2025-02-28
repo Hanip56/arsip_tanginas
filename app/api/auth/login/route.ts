@@ -8,9 +8,12 @@ export async function POST(req: Request) {
     const { email, password } = await req.json();
 
     if (!email || !password) {
-      return new NextResponse("Required field is missing; *email *password", {
-        status: 400,
-      });
+      return new NextResponse(
+        "Kolom yang dibutuhkan belum diisi; *email *password",
+        {
+          status: 400,
+        }
+      );
     }
 
     const user = await prisma.user.findUnique({
@@ -18,13 +21,13 @@ export async function POST(req: Request) {
     });
 
     if (!user) {
-      return new NextResponse("User not found", { status: 404 });
+      return new NextResponse("User tidak ditemukan", { status: 404 });
     }
 
     const isMatchPassword = await bcrypt.compare(password, user.password);
 
     if (!isMatchPassword) {
-      return new NextResponse("Credentials is not valid", { status: 401 });
+      return new NextResponse("Credentials tidak valid", { status: 401 });
     }
 
     // @ts-expect-error :expiresIn must be StringValue

@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { UploadIcon } from "lucide-react";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 const UploadSingleModal = () => {
   const [file, setFile] = useState<File | undefined>();
@@ -27,8 +28,10 @@ const UploadSingleModal = () => {
       const res = await axios.post("/api/upload", formData);
 
       console.log({ res });
-    } catch (error) {
+    } catch (error: any) {
+      const errorMessage = error?.response?.data || "Gagal mengupload";
       console.log(error);
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }

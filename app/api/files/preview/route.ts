@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
     const fileId = req.nextUrl.searchParams.get("fileId");
 
     if (!fileId) {
-      return new NextResponse("fileId is required", { status: 400 });
+      return new NextResponse("fileId harus diisi", { status: 400 });
     }
 
     const auth = new google.auth.GoogleAuth({

@@ -9,9 +9,11 @@ export const getCurrentUser = async () => {
 
 export const checkIsAdmin = async () => {
   const user = await getCurrentUser();
+  let isAdmin = true;
 
-  if (user?.role !== "ADMIN")
-    return new NextResponse("Forbidden", { status: 403 });
+  if (user?.role == "USER") {
+    isAdmin = false;
+  }
 
-  return user;
+  return isAdmin;
 };

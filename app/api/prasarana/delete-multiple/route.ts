@@ -6,7 +6,11 @@ import { NextRequest, NextResponse } from "next/server";
 // delete multiple
 export async function POST(req: NextRequest) {
   try {
-    await checkIsAdmin();
+    const isAdmin = await checkIsAdmin();
+
+    if (!isAdmin) {
+      return new NextResponse("Forbidden", { status: 403 });
+    }
 
     const body = await req.json();
     const { ids } = body;

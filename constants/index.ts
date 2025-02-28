@@ -18,56 +18,66 @@ type NavListType = {
   sub?: NavType[];
 };
 
-export const navigations: NavListType[] = [
-  {
-    type: "subtitle",
-    subtitle: "Workspace",
-  },
-  {
-    type: "single",
-    label: "Dashboard",
-    href: "/",
-    icon: RiDashboardLine,
-  },
-  {
-    type: "single",
-    label: "Prasarana",
-    href: "/prasarana",
-    icon: PiBuildingOffice,
-  },
-  {
-    type: "single",
-    label: "Files",
-    href: "/files",
-    icon: PiFileArchive,
-  },
-  {
-    type: "subtitle",
-    subtitle: "Kategori",
-  },
-  {
-    type: "single",
-    label: "Kategori Prasarana",
-    href: "/kategori",
-    icon: MdOutlineCategory,
-  },
-  {
-    type: "single",
-    label: "Kategori Arsip",
-    href: "/arsip-kategori",
-    icon: MdCategory,
-  },
-  {
-    type: "subtitle",
-    subtitle: "Pengguna",
-  },
-  {
-    type: "single",
-    label: "Kelola Pengguna",
-    href: "/user",
-    icon: MdPerson,
-  },
-];
+export const navigations = (isAdmin: boolean) => {
+  let routes: NavListType[] = [
+    {
+      type: "subtitle",
+      subtitle: "Workspace",
+    },
+    {
+      type: "single",
+      label: "Dashboard",
+      href: "/",
+      icon: RiDashboardLine,
+    },
+    {
+      type: "single",
+      label: "Prasarana",
+      href: "/prasarana",
+      icon: PiBuildingOffice,
+    },
+    {
+      type: "single",
+      label: "Files",
+      href: "/files",
+      icon: PiFileArchive,
+    },
+  ];
+
+  if (isAdmin) {
+    routes = [
+      ...routes,
+      {
+        type: "subtitle",
+        subtitle: "Kategori",
+      },
+      {
+        type: "single",
+        label: "Kategori Prasarana",
+        href: "/kategori",
+        icon: MdOutlineCategory,
+      },
+      {
+        type: "single",
+        label: "Kategori Arsip",
+        href: "/arsip-kategori",
+        icon: MdCategory,
+      },
+      {
+        type: "subtitle",
+        subtitle: "Pengguna",
+      },
+      {
+        type: "single",
+        label: "Kelola Pengguna",
+        href: "/user",
+        icon: MdPerson,
+      },
+    ];
+  }
+
+  return routes;
+};
 
 export const daftarTahunAnggaran = [
   "2021",

@@ -23,3 +23,10 @@ export const apiAuthPrefix = "/api/auth";
  * The default redirect path after loggin in
  */
 export const DEFAULT_LOGIN_REDIRECT = "/";
+
+/**
+ * An array of frontend routes that are protected
+ * These routes Just served for admin and superAdmin role '/'
+ * @type {string[]}
+ */
+export const adminRoutes = ["/user", "/arsip-kategori", "/kategori"];

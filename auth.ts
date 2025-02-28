@@ -22,7 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const { email, password } = credentials;
 
         if (typeof email !== "string" || typeof password !== "string") {
-          throw new Error("Required field is missing");
+          throw new Error("Kolom yang dibutuhkan belum diisi");
         }
 
         user = await prisma.user.findUnique({ where: { email } });

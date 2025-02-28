@@ -81,9 +81,10 @@ const UpsertKategoriModal = ({ open, handleClose, initialData }: Props) => {
       form.reset();
       queryClient.invalidateQueries({ queryKey: ["kategoris"], exact: false });
       handleClose();
-    } catch (error) {
+    } catch (error: any) {
+      const errorMessage = error?.response?.data || "Gagal membuat kategori";
+      toast.error(errorMessage);
       console.log(error);
-      toast.error("Gagal membuat kategori");
     }
 
     setIsLoading(false);

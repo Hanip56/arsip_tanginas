@@ -51,9 +51,9 @@ export default LatestUploadedFiles;
 
 const LatestUploadedSkeleton = () => (
   <Card className="w-full space-y-4">
-    <div className="p-4">
+    <div className="p-6 space-y-6">
       <Skeleton className="w-60 h-8" />
-      <Skeleton className="w-full h-60" />
+      <Skeleton className="w-full h-96" />
     </div>
   </Card>
 );

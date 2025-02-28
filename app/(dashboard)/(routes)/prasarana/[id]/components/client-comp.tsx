@@ -86,9 +86,10 @@ const ClientComp = ({ arsipKategoris }: Props) => {
 
         window.URL.revokeObjectURL(url);
         resolve("Downloaded");
-      } catch (error) {
+      } catch (error: any) {
+        const errorMessage = error?.response?.data || "Gagal mengunduh";
         console.log(error);
-        reject("Gagal mengunduh");
+        reject(errorMessage);
       }
     });
   };

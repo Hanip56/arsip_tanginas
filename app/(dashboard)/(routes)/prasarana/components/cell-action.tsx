@@ -31,8 +31,9 @@ const CellAction: React.FC<CellActionProps> = ({ data, handleOpenUpdate }) => {
         exact: false,
       });
     },
-    onError: (error) => {
-      toast(`Gagal menghapus prasarana.`, {
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data || "Gagal menghapus prasarana";
+      toast(errorMessage, {
         className: "text-rose-600 font-semibold",
       });
       console.log(error);

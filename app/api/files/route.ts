@@ -8,10 +8,10 @@ export async function GET(req: NextRequest) {
     const parentFolderName = req.nextUrl.searchParams.get("parentFolderName"); // prasaranaId
 
     if (!parentFolderName) {
-      return new NextResponse("parentFolderName is required", { status: 400 });
+      return new NextResponse("parentFolderName harus diisi", { status: 400 });
     }
     if (!folderName) {
-      return new NextResponse("folderName is required", { status: 400 });
+      return new NextResponse("folderName harus diisi", { status: 400 });
     }
 
     const auth = new google.auth.GoogleAuth({

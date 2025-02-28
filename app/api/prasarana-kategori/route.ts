@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { checkIsAdmin } from "@/lib/server-utils";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -44,12 +45,19 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    const isAdmin = await checkIsAdmin();
+
+    if (!isAdmin) {
+      return new NextResponse("Forbidden", { status: 403 });
+    }
     const body = await req.json();
 
     const { nama, deskripsi } = body;
 
     if (!nama) {
-      return new NextResponse("Required field is missing", { status: 400 });
+      return new NextResponse("Kolom yang dibutuhkan belum diisi", {
+        status: 400,
+      });
     }
 
     const prasaranaKategori = await prisma.prasaranaKategori.create({

@@ -3,6 +3,8 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import TanstackProvider from "@/components/tanstack-provider";
+import { auth } from "@/auth";
+import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,17 +16,21 @@ const font = Montserrat({
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="en">
       <body className={`${font.className} antialiased`}>
         <TanstackProvider>
-          {children}
-          <Toaster />
+          <SessionProvider session={session}>
+            {children}
+            <Toaster />
+          </SessionProvider>
         </TanstackProvider>
       </body>
     </html>

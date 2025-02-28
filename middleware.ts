@@ -1,11 +1,17 @@
 import { auth } from "@/auth";
-import { apiAuthPrefix, authRoutes, DEFAULT_LOGIN_REDIRECT } from "./routes";
+import {
+  adminRoutes,
+  apiAuthPrefix,
+  authRoutes,
+  DEFAULT_LOGIN_REDIRECT,
+} from "./routes";
 
 export default auth(async (req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
 
   const isAuthRoutes = authRoutes.includes(nextUrl.pathname);
+  const isAdminRoutes = adminRoutes.includes(nextUrl.pathname);
   const isApiRoutes = nextUrl.pathname.startsWith(apiAuthPrefix);
 
   // route for check if user exist in DB && for files
@@ -23,6 +29,10 @@ export default auth(async (req) => {
     }
 
     return;
+  }
+
+  if (isLoggedIn && isAdminRoutes && req.auth?.user.role === "USER") {
+    return Response.redirect(new URL("/", nextUrl));
   }
 
   if (!isLoggedIn) {

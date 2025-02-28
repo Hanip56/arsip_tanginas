@@ -5,9 +5,15 @@ import {
   CONFIG_GOOGLE_CREDENTIALS,
   PARENT_FOLDER_ID,
 } from "@/constants/google-drive";
+import { checkIsAdmin } from "@/lib/server-utils";
 
 export async function POST(req: NextRequest) {
   try {
+    const isAdmin = await checkIsAdmin();
+
+    if (!isAdmin) {
+      return new NextResponse("Forbidden", { status: 403 });
+    }
     // parse form data
     const formData = await req.formData();
     const files = formData.getAll("files") as File[];
@@ -15,13 +21,13 @@ export async function POST(req: NextRequest) {
     const arsipKategoriId = formData.get("arsipKategoriId") as string;
 
     if (!prasaranaId || !arsipKategoriId) {
-      return new NextResponse("prasaranaId & arsipKategoriId are required", {
+      return new NextResponse("prasaranaId & arsipKategoriId harus diisi", {
         status: 400,
       });
     }
 
     if (!files.length) {
-      return new NextResponse("No file uploaded", { status: 400 });
+      return new NextResponse("Tidak ada file Terupload", { status: 400 });
     }
 
     // Authenticate with Google Service Account

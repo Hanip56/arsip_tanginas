@@ -97,9 +97,10 @@ const UpsertUserModal = ({ open, handleClose, initialData }: Props) => {
         exact: false,
       });
       handleClose();
-    } catch (error) {
+    } catch (error: any) {
+      const errorMessage = error?.response?.data || "Gagal membuat user";
       console.log(error);
-      toast.error("Gagal membuat user");
+      toast.error(errorMessage);
     }
 
     setIsLoading(false);

@@ -2,9 +2,16 @@ import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { checkIsAdmin } from "@/lib/server-utils";
 
 export async function POST(req: Request) {
   try {
+    const isAdmin = await checkIsAdmin();
+
+    if (!isAdmin) {
+      return new NextResponse("Forbidden", { status: 403 });
+    }
+
     const {
       // general
       username,
@@ -14,7 +21,7 @@ export async function POST(req: Request) {
 
     if (!username || !email || !password) {
       return new NextResponse(
-        "Required field is missing; *username *email *password",
+        "Kolom yang dibutuhkan belum diisi; *username *email *password",
         { status: 400 }
       );
     }
@@ -24,7 +31,7 @@ export async function POST(req: Request) {
     });
 
     if (userExist) {
-      return new NextResponse("Email already in use", { status: 400 });
+      return new NextResponse("Email sudah digunakan", { status: 400 });
     }
 
     const hashPass = await bcrypt.hash(password, 10);

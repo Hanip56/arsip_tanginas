@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { checkIsAdmin } from "@/lib/server-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
@@ -6,6 +7,11 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const isAdmin = await checkIsAdmin();
+
+    if (!isAdmin) {
+      return new NextResponse("Forbidden", { status: 403 });
+    }
     const body = await req.json();
     const id = (await params).id;
 
@@ -16,7 +22,9 @@ export async function PUT(
     });
 
     if (!arsipKategori)
-      return new NextResponse("Arsip kategori not found", { status: 404 });
+      return new NextResponse("Arsip kategori tidak ditemukan", {
+        status: 404,
+      });
 
     const updatedPrasaranaKategori = await prisma.arsipKategori.update({
       where: {
@@ -39,6 +47,11 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const isAdmin = await checkIsAdmin();
+
+  if (!isAdmin) {
+    return new NextResponse("Forbidden", { status: 403 });
+  }
   const id = (await params).id;
 
   try {
@@ -49,7 +62,9 @@ export async function DELETE(
     });
 
     if (!arsipKategori)
-      return new NextResponse("Arsip kategori not found", { status: 404 });
+      return new NextResponse("Arsip kategori tidak ditemukan", {
+        status: 404,
+      });
 
     const deletedPrasaranaKategori = await prisma.arsipKategori.delete({
       where: {

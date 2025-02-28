@@ -76,8 +76,10 @@ const UploadMultipleModal = ({
       });
       setFiles(undefined);
       setOpen(false);
-    } catch (error) {
+    } catch (error: any) {
+      const errorMessage = error?.response?.data || "Gagal mengupload";
       console.log(error);
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
