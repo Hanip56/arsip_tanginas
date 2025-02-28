@@ -75,7 +75,7 @@ export async function DELETE(
     });
 
     return NextResponse.json({
-      message: `User with id:${deletedUser.id} has been deleted.`,
+      message: `User dengan id:${deletedUser.id} Sudah dihapus.`,
     });
   } catch (error) {
     console.log("[USER_ID_DELETE]", error);

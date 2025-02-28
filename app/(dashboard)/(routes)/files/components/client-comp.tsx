@@ -49,13 +49,14 @@ const ClientComp = ({ totalFiles }: Props) => {
   const query = useQuery({
     queryKey: [
       "files",
-      { pageToken, nama: search, createdTime: createdTimeParam },
+      { pageToken, nama: search, createdTime: createdTimeParam, limit },
     ],
     queryFn: () =>
       GetLatestFiles({
         pageToken,
         nama: search,
         createdTime: createdTimeParam,
+        limit,
       }),
     refetchOnMount: false,
     refetchOnReconnect: false,

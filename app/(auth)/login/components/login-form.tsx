@@ -17,6 +17,7 @@ import { LoginSchema } from "@/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const LoginForm = () => {
@@ -34,17 +35,21 @@ const LoginForm = () => {
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError("");
     startTransition(() => {
-      login(values).then((data) => {
-        if (data?.error) {
-          setError(data.error);
-        } else if (data?.success) {
-          toastSuccess(
-            "Welcome!",
-            "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rerum, animi?"
-          );
-          window.location.href = "/";
-        }
-      });
+      login(values)
+        .then((data) => {
+          if (data?.error) {
+            setError(data.error);
+          } else if (data?.success) {
+            toastSuccess(
+              "Selamat datang!",
+              "Di aplikasi Tanginas Arsip, simpan file dan akses secara online"
+            );
+            window.location.href = "/";
+          }
+        })
+        .catch((error) => {
+          toast.error(error);
+        });
     });
   };
 
@@ -65,8 +70,9 @@ const LoginForm = () => {
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="janedoe@example.com"
+                  placeholder="user@example.com"
                   disabled={disabledCondition}
+                  className="sm:p-6 text-sm sm:text-base"
                 />
               </FormControl>
               <FormMessage />
@@ -83,8 +89,9 @@ const LoginForm = () => {
                 <Input
                   {...field}
                   type="password"
-                  placeholder="janedoe@example.com"
+                  placeholder="******"
                   disabled={disabledCondition}
+                  className="sm:p-6 text-sm sm:text-base"
                 />
               </FormControl>
               <FormMessage />
@@ -94,7 +101,9 @@ const LoginForm = () => {
         <div className="my-1">
           <FormError message={error} />
         </div>
-        <Button disabled={disabledCondition}>Masuk</Button>
+        <Button size="lg" disabled={disabledCondition}>
+          Masuk
+        </Button>
       </form>
     </Form>
   );

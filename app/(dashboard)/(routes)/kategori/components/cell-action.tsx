@@ -15,14 +15,14 @@ type CellActionProps = {
 const CellAction: React.FC<CellActionProps> = ({ data, handleOpenUpdate }) => {
   const queryClient = useQueryClient();
   const [ConfirmationDialog, confirm] = useConfirm(
-    "Are you sure?",
-    `You'll delete this kategori`
+    "Apa kamu yakin?",
+    `Kamu akan menghapus kategori`
   );
 
   const deleteMutation = useMutation({
     mutationFn: deleteOne,
     onSuccess: (data) => {
-      toast(`This kategori has been deleted.`, {
+      toast(`Kategori ini Sudah dihapus.`, {
         className: "text-emerald-600 font-semibold",
       });
 
@@ -35,6 +35,7 @@ const CellAction: React.FC<CellActionProps> = ({ data, handleOpenUpdate }) => {
       const errorMessage = error?.response?.data || "Gagal menghapus kategori";
       toast.error(errorMessage, {
         className: "text-rose-600 font-semibold",
+        description: "Pastikan kategori ini tidak dipakai.",
       });
       console.log(error);
     },

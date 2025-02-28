@@ -12,7 +12,7 @@ export default {
       colors: {
         main: {
           "1": "#087d7d",
-          "2": "#EA5E3D",
+          "2": "#13705e",
         },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

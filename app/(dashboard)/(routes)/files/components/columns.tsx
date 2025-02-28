@@ -58,12 +58,16 @@ export const columns = (): ColumnDef<ColumnType>[] => {
     },
     {
       id: "link",
-      header: "Arsip",
+      header: () => <div className="w-12">Arsip</div>,
       cell: ({ row }) => (
         <Link
           href={`/prasarana/${row.original.prasaranaId}?arsipKategoriId=${row.original.arsipKategoriId}`}
         >
-          <Button variant="ghost" size="icon">
+          <Button
+            variant="secondary"
+            className="bg-main-2/10 text-main-2"
+            size="icon"
+          >
             <ChevronRight className="size-5" />
           </Button>
         </Link>

@@ -132,7 +132,7 @@ const ClientComp = ({ kategoris }: Props) => {
         kategoris={kategoris}
       />
       <main>
-        <div className="w-full flex flex-wrap gap-x-4 gap-y-2 items-center justify-between">
+        <div className="w-full flex flex-wrap gap-x-4 gap-y-4 items-center justify-between">
           <div className="w-full md:max-w-xs space-y-1">
             <Label className="text-zinc-500 text-xs">Cari prasarana</Label>
             <Input
@@ -144,7 +144,7 @@ const ClientComp = ({ kategoris }: Props) => {
           </div>
           {isAdmin && (
             <Button
-              className="self-end"
+              className="w-full sm:w-fit self-end"
               size="sm"
               onClick={() => setUpsertOpenId("new")}
             >

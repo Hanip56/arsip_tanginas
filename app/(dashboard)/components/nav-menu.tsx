@@ -27,7 +27,7 @@ const NavMenu = () => {
     const { success } = await logout();
 
     if (success) {
-      router.refresh();
+      window.location.href = "/login";
     }
   };
 
@@ -39,7 +39,7 @@ const NavMenu = () => {
 
       {/* nav menu */}
       <div className="py-2 text-zinc-900 flex flex-col justify-between h-[90vh]">
-        <div className="flex flex-col py-2  gap-1 overflow-y-auto px-4">
+        <div className="flex flex-col py-2  gap-1 overflow-y-auto sm:px-4">
           {navigations(session?.user.role !== "USER").map((nav, i) =>
             nav.href && nav.type === "single" ? (
               <Link
@@ -112,8 +112,12 @@ const NavMenu = () => {
           )}
         </div>
         <div className="p-4 w-full">
-          <Button onClick={handleLogout} variant="ghost" className="w-full">
-            <LogOutIcon className="size-5 mr-2" /> Logout
+          <Button
+            onClick={handleLogout}
+            variant="secondary"
+            className="w-full bg-main-2/10 text-main-2 text-sm font-semibold"
+          >
+            <LogOutIcon className="size-4 mr-2" /> Keluar
           </Button>
         </div>
       </div>

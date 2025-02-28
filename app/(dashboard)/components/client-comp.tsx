@@ -11,6 +11,7 @@ import { MdFileCopy, MdPerson, MdStorage } from "react-icons/md";
 import { PiBuildingOffice } from "react-icons/pi";
 import LatestUploadedFiles from "./latest-uploaded-files";
 import { useSession } from "next-auth/react";
+import Profile from "./profile";
 
 type DriveInfoMapper = {
   label: string;
@@ -91,7 +92,7 @@ const ClientComp = ({ totalPrasarana, totalUser }: Props) => {
               <CardContent className="p-4 flex flex-col gap-2">
                 <div className="flex items-center justify-between w-full">
                   <div className="text-sm font-medium">{mapper.label}</div>
-                  <mapper.icon />
+                  <mapper.icon className="text-main-2" />
                 </div>
                 <div className="font-semibold text-2xl">{mapper.value}</div>
                 {/* <p className="text-xs text-muted-foreground">
@@ -102,6 +103,9 @@ const ClientComp = ({ totalPrasarana, totalUser }: Props) => {
           </Card>
         ))}
       </div>
+
+      {/* Profile */}
+      <Profile />
 
       {/* Latest uploaded files */}
       <LatestUploadedFiles />

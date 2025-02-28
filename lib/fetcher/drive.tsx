@@ -79,7 +79,7 @@ export const GetInfo = async () => {
 
 type GetLatestFilesParams = {
   pageToken?: string;
-  limit?: string;
+  limit?: number;
   nama?: string;
   createdTime?: "asc" | "desc";
 };

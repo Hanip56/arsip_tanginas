@@ -15,7 +15,7 @@ type CellActionProps = {
 const CellAction: React.FC<CellActionProps> = ({ data, handleOpenUpdate }) => {
   const queryClient = useQueryClient();
   const [ConfirmationDialog, confirm] = useConfirm(
-    "Are you sure?",
+    "Apa kamu yakin?",
     `Prasarana ini akan dihapus`
   );
 

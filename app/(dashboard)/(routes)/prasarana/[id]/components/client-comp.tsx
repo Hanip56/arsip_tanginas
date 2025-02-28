@@ -131,9 +131,9 @@ const ClientComp = ({ arsipKategoris }: Props) => {
   return (
     <div>
       {/* filter */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col-reverse sm:flex-row justify-between gap-4 sm:items-end">
         <div className="flex gap-4 items-center">
-          <div>
+          <div className="w-full">
             <Label className="text-zinc-500 text-xs block mb-2">
               Jenis arsip
             </Label>
@@ -141,7 +141,7 @@ const ClientComp = ({ arsipKategoris }: Props) => {
               value={arsipKategoriId}
               onValueChange={(e) => pushQuery({ arsipKategoriId: e })}
             >
-              <SelectTrigger className="w-80">
+              <SelectTrigger className="w-full sm:w-80">
                 <SelectValue placeholder="Arsip kategori" />
               </SelectTrigger>
               <SelectContent>
@@ -156,24 +156,6 @@ const ClientComp = ({ arsipKategoris }: Props) => {
               </SelectContent>
             </Select>
           </div>
-          {/* <div>
-            <Label className="text-zinc-500 text-xs block mb-2">Urutkan</Label>
-            <Select>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Urutkan" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="test">Test</SelectItem>
-              </SelectContent>
-            </Select>
-          </div> */}
-          {/* <SelectWithLabel
-            label="Urutkan"
-            value={"semua"}
-            items={[{ label: "Semua", value: "semua" }]}
-            onValueChange={(e) => {}}
-            placeholder="Urutkan"
-          /> */}
         </div>
         {isAdmin && (
           <UploadMultipleModal

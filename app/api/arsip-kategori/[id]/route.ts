@@ -73,7 +73,7 @@ export async function DELETE(
     });
 
     return NextResponse.json({
-      message: `Arsip kategori with id:${deletedPrasaranaKategori.id} has been deleted.`,
+      message: `Arsip kategori dengan id:${deletedPrasaranaKategori.id} Sudah dihapus.`,
     });
   } catch (error) {
     console.log("[ARSIP-PRASARANA_ID_DELETE]", error);

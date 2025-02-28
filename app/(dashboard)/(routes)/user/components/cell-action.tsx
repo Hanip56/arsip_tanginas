@@ -15,14 +15,14 @@ type CellActionProps = {
 const CellAction: React.FC<CellActionProps> = ({ data, handleOpenUpdate }) => {
   const queryClient = useQueryClient();
   const [ConfirmationDialog, confirm] = useConfirm(
-    "Are you sure?",
-    `You'll delete this user`
+    "Apa kamu yakin?",
+    `Kamu akan menghapus user`
   );
 
   const deleteMutation = useMutation({
     mutationFn: deleteOne,
     onSuccess: (data) => {
-      toast(`This user has been deleted.`, {
+      toast(`User ini Sudah dihapus.`, {
         className: "text-emerald-600 font-semibold",
       });
 

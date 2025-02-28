@@ -69,7 +69,10 @@ const ClientComp = () => {
             placeholder="Cari kategori"
           />
           <div className="w-full justify-end md:justify-start md:w-fit flex gap-2 items-center">
-            <Button onClick={() => setUpsertOpenId("new")}>
+            <Button
+              className="w-full sm:w-fit"
+              onClick={() => setUpsertOpenId("new")}
+            >
               <PlusIcon className="size-5 mr-2" />{" "}
               <span className="line-clamp-1">Add kategori</span>
             </Button>
