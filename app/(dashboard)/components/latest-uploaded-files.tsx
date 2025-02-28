@@ -11,6 +11,7 @@ import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { id } from "date-fns/locale";
 
 const LatestUploadedFiles = () => {
   const query = useQuery({
@@ -27,7 +28,7 @@ const LatestUploadedFiles = () => {
     id: file.id,
     name: file.name,
     size: formatBytes(+file.size),
-    createdTime: format(file.createdTime, "d MMMM yyyy"),
+    createdTime: format(file.createdTime, "d MMMM yyyy", { locale: id }),
     thumbnailLink: file.thumbnailLink,
     arsipKategori: file.arsipKategori,
     prasarana: file.prasarana,

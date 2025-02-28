@@ -1,8 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { PlusIcon } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@/hooks/use-navigate";
 import { DataTable } from "@/components/ui/data-table-files";
@@ -15,6 +13,7 @@ import { useEffect, useState } from "react";
 import SelectWithLabel from "@/components/ui/select-with-label";
 import { useSearchParams } from "next/navigation";
 import { Label } from "@/components/ui/label";
+import { id } from "date-fns/locale";
 
 type Props = {
   totalFiles: number;
@@ -72,7 +71,7 @@ const ClientComp = ({ totalFiles }: Props) => {
     id: file.id,
     name: file.name,
     size: formatBytes(+file.size),
-    createdTime: format(file.createdTime, "d MMMM yyyy"),
+    createdTime: format(file.createdTime, "d MMMM yyyy", { locale: id }),
     thumbnailLink: file.thumbnailLink,
     arsipKategori: file.arsipKategori,
     prasarana: file.prasarana,

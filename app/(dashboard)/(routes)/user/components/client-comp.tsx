@@ -12,6 +12,7 @@ import { columns } from "./columns";
 import DataTableSkeleton from "@/components/skeletons/data-table-skeleton";
 import UpsertUserModal from "./upsert-user";
 import { format } from "date-fns";
+import { id } from "date-fns/locale";
 
 const ClientComp = () => {
   const [upsertOpenId, setUpsertOpenId] = useState("");
@@ -53,7 +54,7 @@ const ClientComp = () => {
     username: user.username,
     email: user.email,
     role: user.role,
-    createdAt: format(user.createdAt, "dd-MM-yyyy"),
+    createdAt: format(user.createdAt, "dd-MM-yyyy", { locale: id }),
   }));
 
   return (

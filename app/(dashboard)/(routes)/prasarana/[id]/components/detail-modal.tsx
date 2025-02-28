@@ -8,6 +8,7 @@ import { DriveFile } from "@/types/drive";
 import React, { Dispatch, SetStateAction } from "react";
 import { format } from "date-fns";
 import { formatBytes } from "@/lib/utils";
+import { id } from "date-fns/locale";
 
 type Props = {
   open: boolean;
@@ -37,11 +38,11 @@ const DetailModal = ({ open, setOpen, file }: Props) => {
     },
     {
       label: "Dibuat",
-      content: format(file.createdTime, "dd-MM-yyyy"),
+      content: format(file.createdTime, "dd-MM-yyyy", { locale: id }),
     },
     {
       label: "Diperbarui",
-      content: format(file.modifiedTime, "dd-MM-yyyy"),
+      content: format(file.modifiedTime, "dd-MM-yyyy", { locale: id }),
     },
   ];
 
