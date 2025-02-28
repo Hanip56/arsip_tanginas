@@ -33,7 +33,7 @@ const CellAction: React.FC<CellActionProps> = ({ data, handleOpenUpdate }) => {
     },
     onError: (error: any) => {
       const errorMessage = error?.response?.data || "Gagal menghapus user";
-      toast(errorMessage, {
+      toast.error(errorMessage, {
         className: "text-rose-600 font-semibold",
       });
       console.log(error);

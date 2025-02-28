@@ -32,7 +32,7 @@ const BulkAction = ({ setSelectedIds, selectedIds }: Props) => {
     },
     onError: (error: any) => {
       const errorMessage = error?.response?.data || "Gagal menghapus prasarana";
-      toast(errorMessage, {
+      toast.error(errorMessage, {
         className: "text-rose-600 font-semibold",
       });
       console.log(error);

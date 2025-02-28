@@ -21,6 +21,7 @@ import axios from "axios";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import usePushQuery from "@/hooks/use-push-query";
+import { useSession } from "next-auth/react";
 
 type Props = {
   arsipKategoris: ArsipKategori[];
@@ -30,6 +31,8 @@ const ClientComp = ({ arsipKategoris }: Props) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const pushQuery = usePushQuery();
+  const { data: session } = useSession();
+  const isAdmin = session?.user.role !== "USER";
 
   const abortController = useRef<AbortController | null>(null);
   const [kategoriCount, setKategoriCount] = useState<Record<string, number>>(
@@ -172,19 +175,23 @@ const ClientComp = ({ arsipKategoris }: Props) => {
             placeholder="Urutkan"
           /> */}
         </div>
-        <UploadMultipleModal
-          arsipKategoris={arsipKategoris}
-          currentArsipKategoriId={arsipKategoriId}
-        />
+        {isAdmin && (
+          <UploadMultipleModal
+            arsipKategoris={arsipKategoris}
+            currentArsipKategoriId={arsipKategoriId}
+          />
+        )}
       </div>
 
       {/* document */}
       <div className="my-8 px-2 sm:px-0">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-2">
           <h6 className="font-semibold">File</h6>
-          <Button variant="ghost" onClick={handleDownloadFolder}>
-            <DownloadIcon className="size-5 mr-2" /> Download All
-          </Button>
+          {query.data && query.data?.files?.length > 0 && (
+            <Button variant="ghost" onClick={handleDownloadFolder}>
+              <DownloadIcon className="size-5 mr-2" /> Download All
+            </Button>
+          )}
         </div>
 
         <ShowFiles

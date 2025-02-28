@@ -3,13 +3,14 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { GetInfo } from "@/lib/fetcher/drive";
-import { formatBytes } from "@/lib/utils";
+import { cn, formatBytes } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { IconType } from "react-icons/lib";
 import { MdFileCopy, MdPerson, MdStorage } from "react-icons/md";
 import { PiBuildingOffice } from "react-icons/pi";
 import LatestUploadedFiles from "./latest-uploaded-files";
+import { useSession } from "next-auth/react";
 
 type DriveInfoMapper = {
   label: string;
@@ -23,6 +24,9 @@ type Props = {
 };
 
 const ClientComp = ({ totalPrasarana, totalUser }: Props) => {
+  const { data: session } = useSession();
+  const isAdmin = session?.user.role !== "USER";
+
   const driveInfoQuery = useQuery({
     queryKey: ["drive"],
     queryFn: GetInfo,
@@ -30,24 +34,27 @@ const ClientComp = ({ totalPrasarana, totalUser }: Props) => {
 
   const data = driveInfoQuery.data;
 
-  const driveInfoMapper: DriveInfoMapper = [
+  let driveInfoMapper: DriveInfoMapper = [
     {
-      label: "Total Prasarana",
+      label: "Jumlah Prasarana",
       icon: PiBuildingOffice,
       value: totalPrasarana,
-    },
-    {
-      label: "Total User",
-      icon: MdPerson,
-      value: totalUser,
     },
     {
       label: "Jumlah arsip file",
       icon: MdFileCopy,
       value: data?.totalFiles ?? 0,
     },
+  ];
+
+  const driveInfoMapperAdminOnly = [
     {
-      label: "Storage digunakan",
+      label: "Jumlah User",
+      icon: MdPerson,
+      value: totalUser,
+    },
+    {
+      label: "Penyimpanan digunakan",
       icon: MdStorage,
       value: data?.storage?.driveUsed
         ? formatBytes(data?.storage?.driveUsed)
@@ -55,10 +62,19 @@ const ClientComp = ({ totalPrasarana, totalUser }: Props) => {
     },
   ];
 
+  if (isAdmin) {
+    driveInfoMapper = [...driveInfoMapper, ...driveInfoMapperAdminOnly];
+  }
+
   return (
     <div className="space-y-8">
       {/* Information grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
+      <div
+        className={cn(
+          "grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10",
+          isAdmin && "lg:grid-cols-4"
+        )}
+      >
         {driveInfoMapper.map((mapper, i) => (
           <Card key={i}>
             {driveInfoQuery.isLoading && (

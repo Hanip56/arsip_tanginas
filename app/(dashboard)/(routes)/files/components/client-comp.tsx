@@ -25,7 +25,7 @@ const ClientComp = ({ totalFiles }: Props) => {
 
   const { search, handleSearch } = useNavigate();
 
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
   const [pageTokenHistory, setPageTokenHistory] = useState<string[]>([]);
   const [pageToken, setPageToken] = useState("");
   const queryClient = useQueryClient();

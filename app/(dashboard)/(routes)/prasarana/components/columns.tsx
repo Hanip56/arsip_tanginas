@@ -4,6 +4,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { SetStateAction } from "react";
 import CellAction from "./cell-action";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArchiveIcon } from "lucide-react";
 
 export type ColumnType = {
   id: string;
@@ -29,39 +32,56 @@ type Props = {
   setUpsertOpenId: (value: SetStateAction<string>) => void;
   selectedIds: string[];
   setSelectedIds: (value: SetStateAction<string[]>) => void;
+  isAdmin: boolean;
 };
 
 export const columns = ({
   setUpsertOpenId,
   selectedIds,
   setSelectedIds,
+  isAdmin,
 }: Props): ColumnDef<ColumnType>[] => {
   return [
     {
       id: "checkbox",
-      cell: ({ row }) => (
-        <Checkbox
-          className="mr-2"
-          checked={selectedIds.includes(row.original.id)}
-          onCheckedChange={(e) =>
-            setSelectedIds((prev) =>
-              e
-                ? [...prev, row.original.id]
-                : prev.filter((id) => id !== row.original.id)
-            )
-          }
-        ></Checkbox>
-      ),
+      cell: ({ row }) => {
+        return isAdmin ? (
+          <Checkbox
+            className="mr-2"
+            checked={selectedIds.includes(row.original.id)}
+            onCheckedChange={(e) =>
+              setSelectedIds((prev) =>
+                e
+                  ? [...prev, row.original.id]
+                  : prev.filter((id) => id !== row.original.id)
+              )
+            }
+          ></Checkbox>
+        ) : (
+          <></>
+        );
+      },
     },
     {
-      header: () => <div className="w-20">Action</div>,
+      header: () => <div className="w-20">{isAdmin ? "Action" : "Arsip"}</div>,
       id: "action",
       cell: ({ row }) => (
-        <div className="w-20 pl-1">
-          <CellAction
-            data={row.original}
-            handleOpenUpdate={(id) => setUpsertOpenId(id)}
-          />
+        <div className="w-24 pl-1">
+          {isAdmin ? (
+            <CellAction
+              data={row.original}
+              handleOpenUpdate={(id) => setUpsertOpenId(id)}
+            />
+          ) : (
+            <Link
+              href={`prasarana/${row.original.id}`}
+              className="flex items-center"
+            >
+              <Button size="icon" variant="outline">
+                <ArchiveIcon className="size-4" />
+              </Button>
+            </Link>
+          )}
         </div>
       ),
     },

@@ -20,6 +20,7 @@ import usePushQuery from "@/hooks/use-push-query";
 import { daftarTahunAnggaran, kecamatans } from "@/constants";
 import { toRupiah } from "@/lib/utils";
 import BulkAction from "./bulk-action";
+import { useSession } from "next-auth/react";
 
 type Props = {
   kategoris: PrasaranaKategori[];
@@ -35,6 +36,7 @@ const filterParams = [
 ];
 
 const ClientComp = ({ kategoris }: Props) => {
+  const { data: session } = useSession();
   const [upsertOpenId, setUpsertOpenId] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const pushQuery = usePushQuery();
@@ -45,6 +47,9 @@ const ClientComp = ({ kategoris }: Props) => {
   const jenisLahanParam = (params?.jenisLahan as string) ?? "";
   const statusParam = (params?.status as string) ?? "";
   const tahunParam = (params?.tahunAnggaran as string) ?? "";
+
+  const isAdmin = session?.user.role !== "USER";
+
   const {
     page,
     handleNext,
@@ -137,14 +142,16 @@ const ClientComp = ({ kategoris }: Props) => {
               placeholder="Cari nama prasarana"
             />
           </div>
-          <Button
-            className="self-end"
-            size="sm"
-            onClick={() => setUpsertOpenId("new")}
-          >
-            <PlusIcon className="size-4 mr-2" />{" "}
-            <span className="line-clamp-1">Tambah prasarana</span>
-          </Button>
+          {isAdmin && (
+            <Button
+              className="self-end"
+              size="sm"
+              onClick={() => setUpsertOpenId("new")}
+            >
+              <PlusIcon className="size-4 mr-2" />{" "}
+              <span className="line-clamp-1">Tambah prasarana</span>
+            </Button>
+          )}
         </div>
 
         {/* data-table */}
@@ -265,6 +272,7 @@ const ClientComp = ({ kategoris }: Props) => {
                 setUpsertOpenId,
                 selectedIds,
                 setSelectedIds,
+                isAdmin,
               })}
               data={dataTable}
               limit={limit}

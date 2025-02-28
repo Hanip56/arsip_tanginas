@@ -20,6 +20,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteFileById } from "@/lib/fetcher/drive";
 import DetailModal from "./detail-modal";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 type Props = {
   file: DriveFile;
@@ -27,7 +28,10 @@ type Props = {
 };
 
 const FileCard = ({ file, arsipKategoriId }: Props) => {
+  const { data: session } = useSession();
+  const isAdmin = session?.user.role !== "USER";
   const queryClient = useQueryClient();
+
   const [openModal, setOpenModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [ConfirmationDialog, confirm] = useConfirm(
@@ -156,11 +160,13 @@ const FileCard = ({ file, arsipKategoriId }: Props) => {
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={handleDelete}>
-                    <TrashIcon className="size-6" /> Delete
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
+                {isAdmin && (
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem onClick={handleDelete}>
+                      <TrashIcon className="size-6" /> Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </header>
