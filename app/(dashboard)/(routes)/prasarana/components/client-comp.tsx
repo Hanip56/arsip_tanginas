@@ -47,6 +47,7 @@ const ClientComp = ({ kategoris }: Props) => {
   const jenisLahanParam = (params?.jenisLahan as string) ?? "";
   const statusParam = (params?.status as string) ?? "";
   const tahunParam = (params?.tahunAnggaran as string) ?? "";
+  const updatedAtParam = (params?.updatedAt as string) ?? "desc";
 
   const isAdmin = session?.user.role !== "USER";
 
@@ -242,6 +243,17 @@ const ClientComp = ({ kategoris }: Props) => {
                     pushQuery({ tahunAnggaran: e !== "_" ? e : undefined })
                   }
                   placeholder="Semua tahun"
+                />
+                <SelectWithLabel
+                  withLabel={false}
+                  label="Urutkan"
+                  value={updatedAtParam ?? undefined}
+                  items={[
+                    { label: "Terbaru", value: "desc" },
+                    { label: "Terlama", value: "asc" },
+                  ]}
+                  onValueChange={(e) => pushQuery({ updatedAt: e })}
+                  placeholder="Urutkan"
                 />
                 {isFiltering && (
                   <Button
