@@ -125,7 +125,6 @@ const ClientComp = ({ totalFiles }: Props) => {
             }}
             handlePrevious={() => {
               const pageToken = pageTokenHistory[pageTokenHistory.length - 2];
-              console.log({ pageTokenFromHandlePrevious: pageToken });
 
               setPageToken(pageToken ?? "");
               setPageTokenHistory((prev) => prev.slice(0, prev.length - 1));

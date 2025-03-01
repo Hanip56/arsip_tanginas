@@ -51,7 +51,6 @@ const RegisterForm = () => {
       const res = await axios.post(`/api/auth/register`, body);
 
       if (res.status !== 200 && res.data) {
-        console.log({ resData: res.data });
         throw new Error(res.data);
       }
 

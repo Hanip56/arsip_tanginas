@@ -22,8 +22,6 @@ const LatestUploadedFiles = () => {
   if (query.isLoading || query.isPending) return <LatestUploadedSkeleton />;
   if (query.isError) return <h1>Error...</h1>;
 
-  console.log({ data: query.data });
-
   const data = query.data?.files.map((file) => ({
     id: file.id,
     name: file.name,

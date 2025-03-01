@@ -26,8 +26,6 @@ const UploadSingleModal = () => {
       formData.append("file", file);
 
       const res = await axios.post("/api/upload", formData);
-
-      console.log({ res });
     } catch (error: any) {
       const errorMessage = error?.response?.data || "Gagal mengupload";
       console.log(error);

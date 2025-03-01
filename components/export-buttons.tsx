@@ -15,7 +15,6 @@ type Props = {
 const ExportButtons = React.forwardRef<HTMLTableElement, Props>(
   ({ data }, ref) => {
     const keys = data?.[0] ? Object.keys(data[0]) : [];
-    console.log({ data });
 
     // csv
     const headers = data?.[0]
