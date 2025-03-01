@@ -34,7 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const isMatchPassword = await bcrypt.compare(password, user.password);
 
         if (!isMatchPassword) {
-          throw new Error("Credentials is not valid");
+          throw new Error("Credentials tidak valid");
         }
 
         return user;

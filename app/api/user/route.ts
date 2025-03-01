@@ -36,6 +36,9 @@ export async function GET(req: NextRequest) {
       where,
       take: limit,
       skip: limit * (page - 1),
+      omit: {
+        password: true,
+      },
       orderBy,
     });
 

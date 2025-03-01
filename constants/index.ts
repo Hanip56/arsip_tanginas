@@ -1,7 +1,8 @@
 import { IconType } from "react-icons/lib";
 import { RiDashboardLine } from "react-icons/ri";
-import { MdCategory, MdOutlineCategory, MdPerson } from "react-icons/md";
+import { MdOutlineCategory } from "react-icons/md";
 import { PiBuildingOffice, PiFileArchive } from "react-icons/pi";
+import { BiCategory, BiUser } from "react-icons/bi";
 
 type NavType = {
   label: string;
@@ -61,7 +62,7 @@ export const navigations = (isAdmin: boolean) => {
         type: "single",
         label: "Kategori Arsip",
         href: "/arsip-kategori",
-        icon: MdCategory,
+        icon: BiCategory,
       },
       {
         type: "subtitle",
@@ -71,7 +72,7 @@ export const navigations = (isAdmin: boolean) => {
         type: "single",
         label: "Kelola Pengguna",
         href: "/user",
-        icon: MdPerson,
+        icon: BiUser,
       },
     ];
   }

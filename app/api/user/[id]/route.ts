@@ -49,7 +49,7 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(updatedUser);
+    return NextResponse.json({ ...updatedUser, password: undefined });
   } catch (error) {
     console.log("[USER_ID_PUT]", error);
     return new NextResponse("Internal error", { status: 500 });
