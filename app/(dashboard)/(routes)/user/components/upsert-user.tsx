@@ -12,11 +12,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { generateRegisterSchema } from "@/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -30,6 +38,7 @@ type Props = {
 };
 
 const UpsertUserModal = ({ open, handleClose, initialData }: Props) => {
+  const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -46,6 +55,7 @@ const UpsertUserModal = ({ open, handleClose, initialData }: Props) => {
       email: initialData?.email ?? "",
       password: "",
       passwordConfirmation: "",
+      role: initialData?.role ?? "USER",
     },
   });
 
@@ -60,6 +70,7 @@ const UpsertUserModal = ({ open, handleClose, initialData }: Props) => {
     if (initialData) {
       form.setValue("username", initialData.username);
       form.setValue("email", initialData?.email ?? "");
+      form.setValue("role", initialData?.role ?? "USER");
     }
   }, [initialData, form, open]);
 
@@ -74,9 +85,7 @@ const UpsertUserModal = ({ open, handleClose, initialData }: Props) => {
 
       setIsLoading(true);
       const body = {
-        username: values.username,
-        email: values.email,
-        password: values.password,
+        ...values,
       };
       const successMessage = initialData
         ? "User telah dirubah"
@@ -110,7 +119,7 @@ const UpsertUserModal = ({ open, handleClose, initialData }: Props) => {
 
   return (
     <Modal
-      title={initialData ? "Rubah user" : "Buat user"}
+      title={initialData ? "Rubah pengguna" : "Buat pengguna"}
       description=""
       isOpen={open}
       onClose={handleClose}
@@ -154,6 +163,33 @@ const UpsertUserModal = ({ open, handleClose, initialData }: Props) => {
               </FormItem>
             )}
           />
+          {session?.user.role === "SUPERADMIN" &&
+            initialData?.role !== "SUPERADMIN" && (
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value}
+                        onValueChange={(e) => field.onChange(e)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="USER">USER</SelectItem>
+                          <SelectItem value="ADMIN">ADMIN</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
           <FormField
             control={form.control}
             name="password"

@@ -25,6 +25,7 @@ export async function GET(req: NextRequest) {
 
     const where: Prisma.UserWhereInput = {
       username: { contains: search, mode: "insensitive" },
+      hidden: false,
     };
 
     const total_items = await prisma.user.count({

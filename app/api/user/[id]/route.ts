@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import prisma from "@/lib/db";
 import { checkIsAdmin } from "@/lib/server-utils";
 import bcrypt from "bcryptjs";
@@ -8,11 +9,8 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const isAdmin = await checkIsAdmin();
+    const session = await auth();
 
-    if (!isAdmin) {
-      return new NextResponse("Forbidden", { status: 403 });
-    }
     const body = await req.json();
     const id = (await params).id;
 
@@ -23,6 +21,16 @@ export async function PUT(
     });
 
     if (!user) return new NextResponse("User tidak ditemukan", { status: 404 });
+
+    // role ADMIN cannot update SUPERADMIN
+    // role USER cannot update other user
+    if (session?.user.role === "ADMIN" && user.role === "SUPERADMIN") {
+      return new NextResponse("Forbidden", { status: 403 });
+    }
+
+    if (session?.user.id === "USER" && session.user.id !== user.id) {
+      return new NextResponse("Forbidden", { status: 403 });
+    }
 
     let hashedPass: undefined | string = undefined;
     if (body?.password) {
@@ -36,7 +44,7 @@ export async function PUT(
       data: {
         username: body.username ?? undefined,
         email: body.email ?? undefined,
-        role: body.role ?? undefined,
+        role: session?.user.role === "SUPERADMIN" ? body.role : undefined,
         password: hashedPass,
       },
     });
@@ -52,6 +60,7 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const session = await auth();
   const isAdmin = await checkIsAdmin();
 
   if (!isAdmin) {
@@ -67,6 +76,12 @@ export async function DELETE(
     });
 
     if (!user) return new NextResponse("User tidak ditemukan", { status: 404 });
+
+    // role ADMIN cannot delete SUPERADMIN
+    // role USER cannot delete other user
+    if (session?.user.role === "ADMIN" && user.role === "SUPERADMIN") {
+      return new NextResponse("Forbidden", { status: 403 });
+    }
 
     const deletedUser = await prisma.user.delete({
       where: {

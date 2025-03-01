@@ -33,6 +33,7 @@ export const generateRegisterSchema = (type: "CREATE" | "UPDATE") => {
       email: z.string().email({
         message: "Email is not valid",
       }),
+      role: z.string().optional().default("USER"),
       password: z.string().optional(),
       passwordConfirmation: z.string().optional(),
     });
@@ -45,6 +46,7 @@ export const generateRegisterSchema = (type: "CREATE" | "UPDATE") => {
     email: z.string().email({
       message: "Email is not valid",
     }),
+    role: z.string().optional().default("USER"),
     password: z.string().min(6, {
       message: "Minimum password is 6 characters",
     }),

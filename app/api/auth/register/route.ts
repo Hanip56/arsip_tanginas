@@ -3,9 +3,11 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { checkIsAdmin } from "@/lib/server-utils";
+import { auth } from "@/auth";
 
 export async function POST(req: Request) {
   try {
+    const session = await auth();
     const isAdmin = await checkIsAdmin();
 
     if (!isAdmin) {
@@ -17,6 +19,7 @@ export async function POST(req: Request) {
       username,
       email,
       password,
+      role,
     } = await req.json();
 
     if (!username || !email || !password) {
@@ -41,6 +44,7 @@ export async function POST(req: Request) {
         username,
         email,
         password: hashPass,
+        role: session?.user.role === "SUPERADMIN" ? role : undefined,
       },
     });
 

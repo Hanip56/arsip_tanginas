@@ -6,8 +6,8 @@ const ArsipKategoriPage = async () => {
   return (
     <div className="container-dashboard">
       <header className="mb-6">
-        <p className="font-medium">✨ User</p>
-        <h1 className="text-3xl font-semibold my-1">Daftar user</h1>
+        <p className="font-medium">✨ Pengguna</p>
+        <h1 className="text-3xl font-semibold my-1">Daftar Pengguna</h1>
         <BreadcrumbNav />
       </header>
 
