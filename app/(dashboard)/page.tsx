@@ -3,7 +3,11 @@ import ClientComp from "./components/client-comp";
 import prisma from "@/lib/db";
 
 const OverviewPage = async () => {
-  const totalUser = await prisma.user.count();
+  const totalUser = await prisma.user.count({
+    where: {
+      hidden: false,
+    },
+  });
   const totalPrasarana = await prisma.prasarana.count();
 
   return (
