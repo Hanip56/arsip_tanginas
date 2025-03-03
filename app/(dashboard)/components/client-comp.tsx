@@ -9,9 +9,10 @@ import React from "react";
 import { IconType } from "react-icons/lib";
 import { MdFileCopy, MdPerson, MdStorage } from "react-icons/md";
 import { PiBuildingOffice } from "react-icons/pi";
-import LatestUploadedFiles from "./latest-uploaded-files";
 import { useSession } from "next-auth/react";
 import Profile from "./profile";
+import PrasaranaGrid from "./prasarana-grid";
+import { PrasaranaKategori } from "@prisma/client";
 
 type DriveInfoMapper = {
   label: string;
@@ -22,9 +23,14 @@ type DriveInfoMapper = {
 type Props = {
   totalUser: number;
   totalPrasarana: number;
+  prasaranaKategori: PrasaranaKategori[];
 };
 
-const ClientComp = ({ totalPrasarana, totalUser }: Props) => {
+const ClientComp = ({
+  totalPrasarana,
+  totalUser,
+  prasaranaKategori,
+}: Props) => {
   const { data: session } = useSession();
   const isAdmin = session?.user.role !== "USER";
 
@@ -105,10 +111,10 @@ const ClientComp = ({ totalPrasarana, totalUser }: Props) => {
       </div>
 
       {/* Profile */}
-      <Profile />
+      {/* <Profile /> */}
 
-      {/* Latest uploaded files */}
-      <LatestUploadedFiles />
+      {/* prasarana-grid */}
+      <PrasaranaGrid kategoris={prasaranaKategori} />
     </div>
   );
 };

@@ -10,6 +10,8 @@ const OverviewPage = async () => {
   });
   const totalPrasarana = await prisma.prasarana.count();
 
+  const prasaranaKategori = await prisma.prasaranaKategori.findMany();
+
   return (
     <div className="container-dashboard">
       <header>
@@ -18,7 +20,11 @@ const OverviewPage = async () => {
       </header>
 
       <Suspense>
-        <ClientComp totalUser={totalUser} totalPrasarana={totalPrasarana} />
+        <ClientComp
+          totalUser={totalUser}
+          totalPrasarana={totalPrasarana}
+          prasaranaKategori={prasaranaKategori}
+        />
       </Suspense>
     </div>
   );
