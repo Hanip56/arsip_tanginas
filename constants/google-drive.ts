@@ -1,4 +1,5 @@
 export const PARENT_FOLDER_ID = "17_EDKoZlFgNeRpXZdqGQRg6mtSt-RI5I";
+export const KATEGORI_THUMBNAIL_FOLDER_ID = "1nuF96_IxWOCu0eiQBbVXimvmZaD6hq4k";
 export const CONFIG_GOOGLE_CREDENTIALS = JSON.parse(
   Buffer.from(process.env.GOOGLE_CREDENTIALS!, "base64").toString("utf-8")
 );

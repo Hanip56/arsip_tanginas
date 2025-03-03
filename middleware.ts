@@ -42,7 +42,7 @@ export default auth(async (req) => {
   // check if user exist in DB every api request
   if (nextUrl.pathname !== "/logout") {
     const checkUserResponse = await fetch(
-      `${nextUrl.origin}/api/auth/check?id=${req.auth?.user.id}`
+      `${nextUrl.origin}/api/auth/check?id=${req.auth?.user.id ?? ""}`
     );
 
     if (checkUserResponse.status === 404) {

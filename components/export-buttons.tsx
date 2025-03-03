@@ -63,7 +63,7 @@ const ExportButtons = React.forwardRef<HTMLTableElement, Props>(
     // });
 
     return (
-      <div className="flex flex-wrap gap-2 [&>*]:text-[0.65rem]">
+      <div className="flex gap-2 [&>*]:text-[0.65rem]">
         <CSVLink data={data} headers={headers}>
           <Button
             type="button"
@@ -75,7 +75,7 @@ const ExportButtons = React.forwardRef<HTMLTableElement, Props>(
             CSV
           </Button>
         </CSVLink>
-        <Button
+        {/* <Button
           type="button"
           size="sm"
           onClick={handlePdf}
@@ -84,7 +84,7 @@ const ExportButtons = React.forwardRef<HTMLTableElement, Props>(
         >
           <GrDocumentPdf className="mr-2" />
           PDF
-        </Button>
+        </Button> */}
         <Button
           type="button"
           size="sm"

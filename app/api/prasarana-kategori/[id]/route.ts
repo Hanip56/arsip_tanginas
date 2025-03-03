@@ -1,5 +1,7 @@
+import { KATEGORI_THUMBNAIL_FOLDER_ID } from "@/constants/google-drive";
 import prisma from "@/lib/db";
-import { checkIsAdmin } from "@/lib/server-utils";
+import { drive, uploadFile } from "@/lib/google-drive";
+import { checkIsAdmin, extractFileId } from "@/lib/server-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
@@ -12,7 +14,6 @@ export async function PUT(
     if (!isAdmin) {
       return new NextResponse("Forbidden", { status: 403 });
     }
-    const body = await req.json();
     const id = (await params).id;
 
     const prasaranaKategori = await prisma.prasaranaKategori.findUnique({
@@ -21,18 +22,42 @@ export async function PUT(
       },
     });
 
+    const formData = await req.formData();
+    const nama = formData.get("nama") as string;
+    const deskripsi = formData.get("deskripsi") as string | undefined;
+    const image = formData.get("image") as File | undefined;
+
     if (!prasaranaKategori)
       return new NextResponse("Prasarana kategori tidak ditemukan", {
         status: 404,
       });
+
+    let newImageUrl: string | null | undefined = undefined;
+    if (image) {
+      const { webContentLink } = await uploadFile(
+        image,
+        KATEGORI_THUMBNAIL_FOLDER_ID
+      );
+
+      newImageUrl = webContentLink;
+
+      // delete old image
+      const oldFileId = extractFileId(prasaranaKategori.imageUrl ?? "");
+      if (oldFileId) {
+        await drive.files.delete({
+          fileId: oldFileId,
+        });
+      }
+    }
 
     const updatedPrasaranaKategori = await prisma.prasaranaKategori.update({
       where: {
         id,
       },
       data: {
-        nama: body.nama ?? undefined,
-        deskripsi: body.deskripsi ?? undefined,
+        nama: nama ?? undefined,
+        deskripsi: deskripsi ?? undefined,
+        imageUrl: newImageUrl ?? undefined,
       },
     });
 
@@ -71,6 +96,16 @@ export async function DELETE(
         id,
       },
     });
+
+    if (prasaranaKategori.imageUrl) {
+      // delete old image
+      const oldFileId = extractFileId(prasaranaKategori.imageUrl ?? "");
+      if (oldFileId) {
+        await drive.files.delete({
+          fileId: oldFileId,
+        });
+      }
+    }
 
     return NextResponse.json({
       message: `Prasarana kategori dengan id:${deletedPrasaranaKategori.id} Sudah dihapus.`,

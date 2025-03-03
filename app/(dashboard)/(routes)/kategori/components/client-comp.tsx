@@ -51,6 +51,7 @@ const ClientComp = () => {
     id: kategori.id,
     nama: kategori.nama,
     deskripsi: kategori.deskripsi,
+    imageUrl: kategori.imageUrl,
   }));
 
   return (

@@ -5,6 +5,7 @@ import {
 } from "@/constants/google-drive";
 import { drive_v3, google } from "googleapis";
 import prisma from "./db";
+import { Readable } from "stream";
 
 // 🔹 Load Google Drive API client
 const auth = new google.auth.GoogleAuth({
@@ -13,6 +14,37 @@ const auth = new google.auth.GoogleAuth({
 });
 
 export const drive = google.drive({ version: "v3", auth });
+
+export const uploadFile = async (file: File, parent: string) => {
+  try {
+    const arrayBuffer = await file?.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const readableStream = new Readable();
+    readableStream.push(buffer);
+    readableStream.push(null);
+
+    const resDrive = await drive.files.create({
+      requestBody: {
+        name: file.name,
+        parents: [parent],
+      },
+      media: {
+        mimeType: file.type,
+        body: readableStream,
+      },
+      fields: "id, name, webContentLink",
+    });
+
+    return {
+      id: resDrive.data.id,
+      name: resDrive.data.name,
+      webContentLink: resDrive.data.webContentLink,
+    };
+  } catch (error) {
+    console.error(`Failed to upload file: ${error}`);
+    return {};
+  }
+};
 
 export const deleteDriveFolders = async (folderNames: string[]) => {
   try {
@@ -315,7 +347,10 @@ export const GetParentAndGrandParentFolder = async () => {
       prasaranaIds,
     };
   } catch (error) {
-    console.error("Error fetching latest uploaded file:", error);
+    console.error(
+      "Error get parent and grandparent folder information:",
+      error
+    );
     throw new Error("Failed to fetch the latest file");
   }
 };

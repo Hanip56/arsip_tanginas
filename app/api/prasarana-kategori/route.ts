@@ -1,7 +1,10 @@
+import { KATEGORI_THUMBNAIL_FOLDER_ID } from "@/constants/google-drive";
 import prisma from "@/lib/db";
+import { drive, uploadFile } from "@/lib/google-drive";
 import { checkIsAdmin } from "@/lib/server-utils";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { Readable } from "stream";
 
 export async function GET(req: NextRequest) {
   try {
@@ -50,9 +53,12 @@ export async function POST(req: NextRequest) {
     if (!isAdmin) {
       return new NextResponse("Forbidden", { status: 403 });
     }
-    const body = await req.json();
 
-    const { nama, deskripsi } = body;
+    const formData = await req.formData();
+
+    const nama = formData.get("nama") as string;
+    const deskripsi = formData.get("deskripsi") as string | undefined;
+    const image = formData.get("image") as File | undefined;
 
     if (!nama) {
       return new NextResponse("Kolom yang dibutuhkan belum diisi", {
@@ -60,14 +66,26 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const prasaranaKategori = await prisma.prasaranaKategori.create({
+    let imageUrl: string | null | undefined = undefined;
+
+    if (image) {
+      const { webContentLink } = await uploadFile(
+        image,
+        KATEGORI_THUMBNAIL_FOLDER_ID
+      );
+
+      imageUrl = webContentLink;
+    }
+
+    const arsipKategori = await prisma.prasaranaKategori.create({
       data: {
         nama,
         deskripsi,
+        imageUrl,
       },
     });
 
-    return NextResponse.json(prasaranaKategori);
+    return NextResponse.json(arsipKategori);
   } catch (error) {
     console.log("[PRASARANA-KATEGORI_POST]", error);
     return new NextResponse("internal error", { status: 500 });

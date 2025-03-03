@@ -21,6 +21,7 @@ import { daftarTahunAnggaran, kecamatans } from "@/constants";
 import { toRupiah } from "@/lib/utils";
 import BulkAction from "./bulk-action";
 import { useSession } from "next-auth/react";
+import ExportButtons from "@/components/export-buttons";
 
 type Props = {
   kategoris: PrasaranaKategori[];
@@ -134,14 +135,17 @@ const ClientComp = ({ kategoris }: Props) => {
       />
       <main>
         <div className="w-full flex flex-wrap gap-x-4 gap-y-4 items-center justify-between">
-          <div className="w-full md:max-w-xs space-y-1">
-            <Label className="text-zinc-500 text-xs">Cari prasarana</Label>
-            <Input
-              value={search}
-              onChange={handleSearch}
-              className="w-full bg-white text-xs"
-              placeholder="Cari nama prasarana"
-            />
+          <div className="flex items-end gap-4">
+            <div className="w-full md:max-w-xs space-y-1">
+              <Label className="text-zinc-500 text-xs">Cari prasarana</Label>
+              <Input
+                value={search}
+                onChange={handleSearch}
+                className="w-full bg-white text-xs"
+                placeholder="Cari nama prasarana"
+              />
+            </div>
+            <ExportButtons data={dataTable} />
           </div>
           {isAdmin && (
             <Button

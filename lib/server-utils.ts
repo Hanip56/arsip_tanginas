@@ -17,3 +17,8 @@ export const checkIsAdmin = async () => {
 
   return isAdmin;
 };
+
+export const extractFileId = (webContentLink: string) => {
+  const match = webContentLink.match(/id=([^&]+)/);
+  return match ? match[1] : null;
+};

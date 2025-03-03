@@ -1,5 +1,6 @@
 "use client";
 
+import SingleInputDropzone from "@/components/single-input-dropzone";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,10 +12,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
+import { ImageType } from "@/schemas/file";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PrasaranaKategori } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { UploadCloudIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -26,6 +29,7 @@ const KategoriSchema = z.object({
     message: "Kolom nama harus diisi",
   }),
   deskripsi: z.string().optional(),
+  image: ImageType,
 });
 
 type Props = {
@@ -37,7 +41,6 @@ type Props = {
 const UpsertKategoriModal = ({ open, handleClose, initialData }: Props) => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const form = useForm<z.infer<typeof KategoriSchema>>({
     resolver: zodResolver(KategoriSchema),
     defaultValues: {
@@ -50,6 +53,7 @@ const UpsertKategoriModal = ({ open, handleClose, initialData }: Props) => {
     if (!open) {
       form.setValue("nama", "");
       form.setValue("deskripsi", "");
+      form.setValue("image", undefined);
     }
 
     if (initialData?.nama) {
@@ -61,20 +65,23 @@ const UpsertKategoriModal = ({ open, handleClose, initialData }: Props) => {
   const onSubmit = async (values: z.infer<typeof KategoriSchema>) => {
     try {
       setIsLoading(true);
-      const body = {
-        nama: values.nama,
-        deskripsi: values.deskripsi,
-      };
+      const formData = new FormData();
+      formData.append("nama", values.nama);
+      formData.append("deskripsi", values.deskripsi ?? "");
+      if (values.image) {
+        formData.append("image", values.image);
+      }
+
       const successMessage = initialData
         ? "Kategori telah dirubah"
         : "Kategori telah dibuat";
 
       if (initialData) {
         // update
-        await axios.put(`/api/prasarana-kategori/${initialData.id}`, body);
+        await axios.put(`/api/prasarana-kategori/${initialData.id}`, formData);
       } else {
         // create
-        await axios.post(`/api/prasarana-kategori`, body);
+        await axios.post(`/api/prasarana-kategori`, formData);
       }
 
       toast.success(successMessage);
@@ -130,6 +137,24 @@ const UpsertKategoriModal = ({ open, handleClose, initialData }: Props) => {
                     {...field}
                     disabled={isLoading}
                     placeholder="Masukan deskripsi kategori"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name={"image"}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Gambar</FormLabel>
+                <FormControl>
+                  <SingleInputDropzone
+                    file={field.value}
+                    setFile={(e) => field.onChange(e)}
+                    disabled={isLoading}
+                    preImageSrc={initialData?.imageUrl ?? undefined}
                   />
                 </FormControl>
                 <FormMessage />

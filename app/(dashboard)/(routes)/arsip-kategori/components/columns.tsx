@@ -14,9 +14,14 @@ export const columns = (
   setUpsertOpenId: (value: SetStateAction<string>) => void
 ): ColumnDef<ColumnType>[] => {
   return [
+    // {
+    //   accessorKey: "id",
+    //   header: "ID",
+    // },
     {
-      accessorKey: "id",
-      header: "ID",
+      id: "no",
+      header: "No",
+      cell: ({ row }) => <div>{row.index + 1}</div>,
     },
     {
       accessorKey: "nama",
