@@ -87,12 +87,22 @@ model Prasarana {
   updatedAt DateTime @updatedAt
 }
 
+model AccessArsipKategori {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  role            UserRole
+  arsipKategori   ArsipKategori? @relation(fields: [arsipKategoriId], references: [id], onDelete: Cascade)
+  arsipKategoriId String?        @db.ObjectId
+
+  @@unique([id, role])
+}
+
 model ArsipKategori {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  id        String                @id @default(auto()) @map("_id") @db.ObjectId
   nama      String
   deskripsi String?
   imageUrl  String?
   Arsip     Arsip[]
+  access    AccessArsipKategori[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

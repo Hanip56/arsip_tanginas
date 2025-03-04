@@ -8,11 +8,20 @@ export type ColumnType = {
   id: string;
   nama: string;
   deskripsi?: string | null;
+  access?: string;
 };
 
-export const columns = (
-  setUpsertOpenId: (value: SetStateAction<string>) => void
-): ColumnDef<ColumnType>[] => {
+type ColumnParams = {
+  setUpsertOpenId: (value: SetStateAction<string>) => void;
+  page: number;
+  limit: number;
+};
+
+export const columns = ({
+  setUpsertOpenId,
+  limit,
+  page,
+}: ColumnParams): ColumnDef<ColumnType>[] => {
   return [
     // {
     //   accessorKey: "id",
@@ -21,7 +30,7 @@ export const columns = (
     {
       id: "no",
       header: "No",
-      cell: ({ row }) => <div>{row.index + 1}</div>,
+      cell: ({ row }) => <div>{row.index + 1 + (page - 1) * limit}</div>,
     },
     {
       accessorKey: "nama",
@@ -30,6 +39,10 @@ export const columns = (
     {
       accessorKey: "deskripsi",
       header: "Deskripsi",
+    },
+    {
+      accessorKey: "access",
+      header: "Akses",
     },
     {
       id: "action",

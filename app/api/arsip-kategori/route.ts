@@ -28,6 +28,9 @@ export async function GET(req: NextRequest) {
 
     const arsipKategoris = await prisma.arsipKategori.findMany({
       where,
+      include: {
+        access: true,
+      },
       take: limit,
       skip: limit * (page - 1),
       orderBy,
@@ -53,7 +56,7 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
 
-    const { nama, deskripsi } = body;
+    const { nama, deskripsi, access } = body;
 
     if (!nama) {
       return new NextResponse("Kolom yang dibutuhkan belum diisi", {
@@ -61,10 +64,22 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    const accessMapper =
+      access && access.length > 0
+        ? access.map((role: string) => ({ role }))
+        : undefined;
+
     const arsipKategori = await prisma.arsipKategori.create({
       data: {
         nama,
         deskripsi,
+        access: !accessMapper
+          ? undefined
+          : {
+              createMany: {
+                data: accessMapper,
+              },
+            },
       },
     });
 

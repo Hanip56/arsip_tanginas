@@ -112,7 +112,7 @@ const ClientComp = ({
       </div>
 
       {/* Profile */}
-      {/* <Profile /> */}
+      <Profile />
 
       {/* prasarana-grid */}
       <PrasaranaGrid kategoris={prasaranaKategori} />

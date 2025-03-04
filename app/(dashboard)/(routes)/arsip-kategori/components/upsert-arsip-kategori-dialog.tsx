@@ -1,9 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -11,6 +13,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
+import { roles } from "@/constants/role";
+import { ArsipKategoriWithAccess } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PrasaranaKategori } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
@@ -26,12 +30,13 @@ const KategoriSchema = z.object({
     message: "Kolom nama harus diisi",
   }),
   deskripsi: z.string().optional(),
+  access: z.array(z.string()),
 });
 
 type Props = {
   open: boolean;
   handleClose: () => void;
-  initialData?: PrasaranaKategori;
+  initialData?: ArsipKategoriWithAccess;
 };
 
 const UpsertKategoriModal = ({ open, handleClose, initialData }: Props) => {
@@ -43,6 +48,7 @@ const UpsertKategoriModal = ({ open, handleClose, initialData }: Props) => {
     defaultValues: {
       nama: initialData?.nama ?? "",
       deskripsi: initialData?.deskripsi ?? "",
+      access: [],
     },
   });
 
@@ -55,6 +61,7 @@ const UpsertKategoriModal = ({ open, handleClose, initialData }: Props) => {
     if (initialData?.nama) {
       form.setValue("nama", initialData.nama);
       form.setValue("deskripsi", initialData?.deskripsi ?? "");
+      form.setValue("access", initialData?.access.map((a) => a.role) ?? []);
     }
   }, [initialData, form, open]);
 
@@ -64,6 +71,7 @@ const UpsertKategoriModal = ({ open, handleClose, initialData }: Props) => {
       const body = {
         nama: values.nama,
         deskripsi: values.deskripsi,
+        access: values.access,
       };
       const successMessage = initialData
         ? "Kategori telah dirubah"
@@ -127,18 +135,50 @@ const UpsertKategoriModal = ({ open, handleClose, initialData }: Props) => {
             name={"deskripsi"}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Deskripsi</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    disabled={isLoading}
-                    placeholder="Masukan deskripsi kategori"
+                <div className="mb-4">
+                  <FormLabel className="text-base">Akses</FormLabel>
+                  <FormDescription>
+                    Beri akses kepada user dengan role:
+                  </FormDescription>
+                </div>
+                {roles.map((item) => (
+                  <FormField
+                    key={item}
+                    control={form.control}
+                    name="access"
+                    render={({ field }) => {
+                      return (
+                        <FormItem
+                          key={item}
+                          className="flex flex-row items-start space-x-3 space-y-0"
+                        >
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value?.includes(item)}
+                              onCheckedChange={(checked) => {
+                                return checked
+                                  ? field.onChange([...field.value, item])
+                                  : field.onChange(
+                                      field.value?.filter(
+                                        (value) => value !== item
+                                      )
+                                    );
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel className="text-sm font-normal">
+                            {item}
+                          </FormLabel>
+                        </FormItem>
+                      );
+                    }}
                   />
-                </FormControl>
+                ))}
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <Button disabled={isLoading}>
             {initialData ? "Rubah" : "Tambah"}
           </Button>

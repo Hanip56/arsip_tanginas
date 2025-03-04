@@ -51,6 +51,7 @@ const ClientComp = () => {
     id: kategori.id,
     nama: kategori.nama,
     deskripsi: kategori.deskripsi,
+    access: kategori.access.map((a) => a.role).join(", "),
   }));
 
   return (
@@ -79,7 +80,7 @@ const ClientComp = () => {
         {/* data-table */}
         <div className="my-4">
           <DataTable
-            columns={columns(setUpsertOpenId)}
+            columns={columns({ setUpsertOpenId, page, limit })}
             data={dataTable}
             limit={limit}
             page={page}

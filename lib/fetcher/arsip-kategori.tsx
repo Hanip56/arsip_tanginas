@@ -1,7 +1,8 @@
 import { axiosInstance } from "../axios";
 import axios from "axios";
 import { DEFAULT_LIMIT_REQUEST } from "../settings";
-import { PrasaranaKategori } from "@prisma/client";
+import { ArsipKategori, PrasaranaKategori } from "@prisma/client";
+import { ArsipKategoriWithAccess } from "@/types";
 
 type GetAllParams = {
   page?: number;
@@ -14,7 +15,7 @@ type GetAllResponse = {
   page: number;
   limit: number;
   total_items: number;
-  data: PrasaranaKategori[];
+  data: ArsipKategoriWithAccess[];
 };
 
 export const getAll = async ({
@@ -48,7 +49,7 @@ export const getAll = async ({
 
 type UpdateParams = {
   id: string;
-  data: Partial<PrasaranaKategori>;
+  data: Partial<ArsipKategori & { access?: string[] }>;
 };
 
 export const update = async ({ id, data }: UpdateParams) => {
