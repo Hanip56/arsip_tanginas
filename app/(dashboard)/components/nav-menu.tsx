@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { logout } from "@/actions/logout";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { ISADMIN } from "@/constants/role";
 
 const NavMenu = () => {
   const { data: session } = useSession();
@@ -40,7 +41,7 @@ const NavMenu = () => {
       {/* nav menu */}
       <div className="py-2 text-zinc-900 flex flex-col justify-between h-[90vh]">
         <div className="flex flex-col py-2  gap-1 overflow-y-auto sm:px-4">
-          {navigations(session?.user.role !== "USER").map((nav, i) =>
+          {navigations(ISADMIN(session?.user.role)).map((nav, i) =>
             nav.href && nav.type === "single" ? (
               <Link
                 key={i}

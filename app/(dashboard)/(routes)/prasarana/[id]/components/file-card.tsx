@@ -21,6 +21,7 @@ import { deleteFileById } from "@/lib/fetcher/drive";
 import DetailModal from "./detail-modal";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { ISADMIN } from "@/constants/role";
 
 type Props = {
   file: DriveFile;
@@ -29,7 +30,7 @@ type Props = {
 
 const FileCard = ({ file, arsipKategoriId }: Props) => {
   const { data: session } = useSession();
-  const isAdmin = session?.user.role !== "USER";
+  const isAdmin = ISADMIN(session?.user.role);
   const queryClient = useQueryClient();
 
   const [openModal, setOpenModal] = useState(false);

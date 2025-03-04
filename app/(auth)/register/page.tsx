@@ -2,11 +2,12 @@ import Link from "next/link";
 import RegisterForm from "./components/register-form";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { ISADMIN } from "@/constants/role";
 
 const LoginPage = async () => {
   const session = await auth();
 
-  if (!session || session?.user.role === "USER") {
+  if (!session || !ISADMIN(session?.user.role)) {
     return redirect("/login");
   }
 

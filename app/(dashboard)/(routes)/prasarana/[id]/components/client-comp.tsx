@@ -22,6 +22,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import usePushQuery from "@/hooks/use-push-query";
 import { useSession } from "next-auth/react";
+import { ISADMIN } from "@/constants/role";
 
 type Props = {
   arsipKategoris: ArsipKategori[];
@@ -32,7 +33,7 @@ const ClientComp = ({ arsipKategoris }: Props) => {
   const searchParams = useSearchParams();
   const pushQuery = usePushQuery();
   const { data: session } = useSession();
-  const isAdmin = session?.user.role !== "USER";
+  const isAdmin = ISADMIN(session?.user.role);
 
   const abortController = useRef<AbortController | null>(null);
   const [kategoriCount, setKategoriCount] = useState<Record<string, number>>(

@@ -182,6 +182,8 @@ const UpsertUserModal = ({ open, handleClose, initialData }: Props) => {
                         <SelectContent>
                           <SelectItem value="USER">USER</SelectItem>
                           <SelectItem value="ADMIN">ADMIN</SelectItem>
+                          <SelectItem value="LAPANGAN">LAPANGAN</SelectItem>
+                          <SelectItem value="KONSULTAN">KONSULTAN</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>

@@ -5,6 +5,7 @@ import {
   authRoutes,
   DEFAULT_LOGIN_REDIRECT,
 } from "./routes";
+import { ISADMIN } from "./constants/role";
 
 export default auth(async (req) => {
   const { nextUrl } = req;
@@ -31,7 +32,7 @@ export default auth(async (req) => {
     return;
   }
 
-  if (isLoggedIn && isAdminRoutes && req.auth?.user.role === "USER") {
+  if (isLoggedIn && isAdminRoutes && !ISADMIN(req.auth?.user.role)) {
     return Response.redirect(new URL("/", nextUrl));
   }
 

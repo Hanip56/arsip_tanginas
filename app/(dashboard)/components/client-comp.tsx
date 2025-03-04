@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import Profile from "./profile";
 import PrasaranaGrid from "./prasarana-grid";
 import { PrasaranaKategori } from "@prisma/client";
+import { ISADMIN } from "@/constants/role";
 
 type DriveInfoMapper = {
   label: string;
@@ -32,7 +33,7 @@ const ClientComp = ({
   prasaranaKategori,
 }: Props) => {
   const { data: session } = useSession();
-  const isAdmin = session?.user.role !== "USER";
+  const isAdmin = ISADMIN(session?.user.role);
 
   const driveInfoQuery = useQuery({
     queryKey: ["drive"],

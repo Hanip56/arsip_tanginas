@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { ISADMIN } from "@/constants/role";
 import { NextResponse } from "next/server";
 
 export const getCurrentUser = async () => {
@@ -11,7 +12,7 @@ export const checkIsAdmin = async () => {
   const user = await getCurrentUser();
   let isAdmin = true;
 
-  if (user?.role == "USER") {
+  if (!ISADMIN(user?.role)) {
     isAdmin = false;
   }
 

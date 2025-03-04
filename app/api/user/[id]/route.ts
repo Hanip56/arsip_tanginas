@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { ISADMIN } from "@/constants/role";
 import prisma from "@/lib/db";
 import { checkIsAdmin } from "@/lib/server-utils";
 import bcrypt from "bcryptjs";
@@ -28,7 +29,7 @@ export async function PUT(
       return new NextResponse("Forbidden", { status: 403 });
     }
 
-    if (session?.user.id === "USER" && session.user.id !== user.id) {
+    if (!ISADMIN(session?.user.role) && session?.user.id !== user.id) {
       return new NextResponse("Forbidden", { status: 403 });
     }
 

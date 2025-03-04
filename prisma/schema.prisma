@@ -17,6 +17,8 @@ enum UserRole {
   SUPERADMIN
   ADMIN
   USER
+  LAPANGAN
+  KONSULTAN
 }
 
 enum Satuan {

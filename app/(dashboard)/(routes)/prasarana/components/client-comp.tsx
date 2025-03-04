@@ -22,6 +22,7 @@ import { toRupiah } from "@/lib/utils";
 import BulkAction from "./bulk-action";
 import { useSession } from "next-auth/react";
 import ExportButtons from "@/components/export-buttons";
+import { ISADMIN } from "@/constants/role";
 
 type Props = {
   kategoris: PrasaranaKategori[];
@@ -50,7 +51,7 @@ const ClientComp = ({ kategoris }: Props) => {
   const tahunParam = (params?.tahunAnggaran as string) ?? "";
   const updatedAtParam = (params?.updatedAt as string) ?? "desc";
 
-  const isAdmin = session?.user.role !== "USER";
+  const isAdmin = ISADMIN(session?.user.role);
 
   const {
     page,
