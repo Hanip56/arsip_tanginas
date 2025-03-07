@@ -55,22 +55,23 @@ const ClientComp = () => {
   }));
 
   return (
-    <>
+    <div className="bg-white rounded-md p-6 shadow-sm">
       <UpsertKategoriDialog
         open={!!upsertOpenId}
         handleClose={() => setUpsertOpenId("")}
         initialData={initialData}
       />
       <main>
+        <h1 className="text-2xl font-semibold mb-4">Arsip kategori</h1>
         <div className="w-full py-3 border-b flex flex-col md:flex-row gap-4 items-center justify-between">
           <Input
             value={search}
             onChange={handleSearch}
-            className="w-full md:max-w-md text-xs"
+            className="w-full md:max-w-md bg-white text-xs rounded-full"
             placeholder="Cari kategori"
           />
           <div className="w-full justify-end md:justify-start md:w-fit flex gap-2 items-center">
-            <Button onClick={() => setUpsertOpenId("new")}>
+            <Button className="w-full" onClick={() => setUpsertOpenId("new")}>
               <PlusIcon className="size-5 mr-2" />{" "}
               <span className="line-clamp-1">Add arsip kategori</span>
             </Button>
@@ -90,7 +91,7 @@ const ClientComp = () => {
           />
         </div>
       </main>
-    </>
+    </div>
   );
 };
 

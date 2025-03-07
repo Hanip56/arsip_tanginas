@@ -5,13 +5,13 @@ import {
   CONFIG_GOOGLE_CREDENTIALS,
   PARENT_FOLDER_ID,
 } from "@/constants/google-drive";
-import { checkIsAdmin } from "@/lib/server-utils";
+import { checkIsAdmin, getCurrentUser } from "@/lib/server-utils";
 
 export async function POST(req: NextRequest) {
   try {
-    const isAdmin = await checkIsAdmin();
+    const currentUser = await getCurrentUser();
 
-    if (!isAdmin) {
+    if (currentUser?.role === "USER") {
       return new NextResponse("Forbidden", { status: 403 });
     }
     // parse form data

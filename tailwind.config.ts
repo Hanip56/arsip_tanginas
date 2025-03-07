@@ -11,8 +11,8 @@ export default {
     extend: {
       colors: {
         main: {
-          "1": "#087d7d",
-          "2": "#13705e",
+          "1": "#ffd166",
+          "2": "#07394a",
         },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

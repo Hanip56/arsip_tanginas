@@ -63,16 +63,16 @@ const ExportButtons = React.forwardRef<HTMLTableElement, Props>(
     // });
 
     return (
-      <div className="flex gap-2 [&>*]:text-[0.65rem]">
+      <div className="flex flex-wrap gap-2 [&>*]:text-[0.65rem]">
         <CSVLink data={data} headers={headers}>
           <Button
             type="button"
-            size="sm"
-            // className="text-[0.65rem] bg-yellow-600 hover:bg-yellow-600/80"
+            // size="sm"
+            className="text-[0.65rem]"
             variant="outline"
           >
             <GrDocumentCsv className="mr-2" />
-            CSV
+            EXPORT CSV
           </Button>
         </CSVLink>
         {/* <Button
@@ -87,14 +87,15 @@ const ExportButtons = React.forwardRef<HTMLTableElement, Props>(
         </Button> */}
         <Button
           type="button"
-          size="sm"
+          // size="sm"
           onClick={handleExcel}
           // className="bg-green-600 hover:bg-green-600/80"
           variant="outline"
         >
           <GrDocumentExcel className="mr-2" />
-          EXCEL
+          EXPORT EXCEL
         </Button>
+
         {/* <Button type="button" size="sm" onClick={() => handlePrint()}>
           <GrPrint className="mr-2" />
           PRINT

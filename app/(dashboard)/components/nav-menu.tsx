@@ -34,23 +34,23 @@ const NavMenu = () => {
 
   return (
     <div className="h-full w-full">
-      <div className="flex flex-col items-center justify-center pb-2 border-b">
+      <div className="flex flex-col items-center justify-center pb-2 border-b border-b-white/20">
         <Logo />
       </div>
 
       {/* nav menu */}
       <div className="py-2 text-zinc-900 flex flex-col justify-between h-[90vh]">
         <div className="flex flex-col py-2  gap-1 overflow-y-auto sm:px-4">
-          {navigations(ISADMIN(session?.user.role)).map((nav, i) =>
+          {navigations(session?.user.role).map((nav, i) =>
             nav.href && nav.type === "single" ? (
               <Link
                 key={i}
                 href={nav.href}
                 className={cn(
-                  "p-3 flex items-center gap-3 rounded-md",
+                  "p-3 flex items-center gap-3 rounded-md border transition-all",
                   nav.href === shortPathname
-                    ? "bg-main-2 text-white"
-                    : "hover:bg-main-2/10"
+                    ? "bg-white/10 text-white border-white/30"
+                    : "hover:bg-white/10 hover:border-white/30 border-transparent text-white/90"
                 )}
               >
                 {nav.icon && <nav.icon />}
@@ -105,7 +105,7 @@ const NavMenu = () => {
             ) : (
               <div
                 key={nav.subtitle}
-                className="text-xs font-medium text-zinc-400 px-3 pt-2"
+                className="text-xs font-medium text-white/50 px-3 pt-2"
               >
                 {nav.subtitle ?? ""}
               </div>
@@ -115,8 +115,8 @@ const NavMenu = () => {
         <div className="p-4 w-full">
           <Button
             onClick={handleLogout}
-            variant="secondary"
-            className="w-full bg-main-2/10 text-main-2 text-sm font-semibold"
+            variant="ghost"
+            className="w-full text-gray-300 text-sm font-semibold hover:bg-white/10 hover:text-white"
           >
             <LogOutIcon className="size-4 mr-2" /> Keluar
           </Button>

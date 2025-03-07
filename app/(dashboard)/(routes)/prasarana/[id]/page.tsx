@@ -1,9 +1,31 @@
 import prisma from "@/lib/db";
 import ClientComp from "./components/client-comp";
 import BreadcrumbNav from "@/components/breadcrumb-nav";
+import { auth } from "@/auth";
+import { ISADMIN } from "@/constants/role";
 
 const PrasaranaArsipPage = async () => {
-  const arsipKategoris = await prisma.arsipKategori.findMany();
+  const session = await auth();
+  const isAdmin = ISADMIN(session?.user.role);
+
+  let where: any = undefined;
+
+  if (!isAdmin) {
+    where = {
+      access: {
+        some: {
+          role: session?.user.role,
+        },
+      },
+    };
+  }
+
+  const arsipKategoris = await prisma.arsipKategori.findMany({
+    where,
+    orderBy: {
+      nama: "asc",
+    },
+  });
 
   return (
     <div className="container-dashboard">

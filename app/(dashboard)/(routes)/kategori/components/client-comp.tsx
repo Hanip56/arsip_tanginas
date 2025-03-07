@@ -55,18 +55,19 @@ const ClientComp = () => {
   }));
 
   return (
-    <>
+    <div className="bg-white rounded-md p-6 shadow-sm">
       <UpsertKategoriDialog
         open={!!upsertOpenId}
         handleClose={() => setUpsertOpenId("")}
         initialData={initialData}
       />
       <main>
-        <div className="w-full py-3 border-b flex flex-col md:flex-row gap-4 items-center justify-between">
+        <h1 className="text-2xl font-semibold mb-4">Kategori Prasarana</h1>
+        <div className="w-full py-5 border-b flex flex-col md:flex-row gap-4 items-center justify-between">
           <Input
             value={search}
             onChange={handleSearch}
-            className="w-full md:max-w-md text-xs"
+            className="w-full md:max-w-md bg-white text-xs rounded-full"
             placeholder="Cari kategori"
           />
           <div className="w-full justify-end md:justify-start md:w-fit flex gap-2 items-center">
@@ -81,7 +82,7 @@ const ClientComp = () => {
         </div>
 
         {/* data-table */}
-        <div className="my-4">
+        <div className="my-4 mt-5">
           <DataTable
             columns={columns(setUpsertOpenId)}
             data={dataTable}
@@ -93,7 +94,7 @@ const ClientComp = () => {
           />
         </div>
       </main>
-    </>
+    </div>
   );
 };
 

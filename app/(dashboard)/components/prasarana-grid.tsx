@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "@/hooks/use-navigate";
 import { getAll } from "@/lib/fetcher/prasarana";
 import Image from "next/image";
@@ -31,6 +31,10 @@ const PrasaranaGrid = ({ kategoris }: Props) => {
   const debouncedSearch = useDebounce(search);
 
   const { handleSearch, updatedAt, limit } = useNavigate();
+
+  useEffect(() => {
+    setPage(1);
+  }, [kategoriId, debouncedSearch]);
 
   const query = useQuery({
     queryKey: [

@@ -13,7 +13,7 @@ import { PrasaranaKategori } from "@prisma/client";
 import qs from "query-string";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { PlusIcon, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import UpsertPrasaranaDialog from "./upsert-prasarana-dialog";
 import SelectWithLabel from "@/components/ui/select-with-label";
 import usePushQuery from "@/hooks/use-push-query";
@@ -23,6 +23,7 @@ import BulkAction from "./bulk-action";
 import { useSession } from "next-auth/react";
 import ExportButtons from "@/components/export-buttons";
 import { ISADMIN } from "@/constants/role";
+import { BsFileEarmarkPlusFill } from "react-icons/bs";
 
 type Props = {
   kategoris: PrasaranaKategori[];
@@ -127,7 +128,7 @@ const ClientComp = ({ kategoris }: Props) => {
   const isFiltering = Object.keys(params).some((v) => filterParams.includes(v));
 
   return (
-    <>
+    <div className="bg-white rounded-md p-6 shadow-sm">
       <UpsertPrasaranaDialog
         open={!!upsertOpenId}
         handleClose={() => setUpsertOpenId("")}
@@ -135,43 +136,44 @@ const ClientComp = ({ kategoris }: Props) => {
         kategoris={kategoris}
       />
       <main>
+        <h1 className="text-2xl font-semibold mb-4">Prasarana</h1>
         <div className="w-full flex flex-wrap gap-x-4 gap-y-4 items-center justify-between">
-          <div className="flex items-end gap-4">
-            <div className="w-full md:max-w-xs space-y-1">
-              <Label className="text-zinc-500 text-xs">Cari prasarana</Label>
+          <div className="w-full md:max-w-[20rem] space-y-1">
+            <div className="flex items-end gap-4">
+              <Label
+                className="text-zinc-500 text-xs sr-only"
+                htmlFor="cari-prasarana"
+              >
+                Cari prasarana
+              </Label>
               <Input
+                id="cari-prasarana"
                 value={search}
                 onChange={handleSearch}
-                className="w-full bg-white text-xs"
+                className="w-full bg-white text-xs rounded-full"
                 placeholder="Cari nama prasarana"
               />
             </div>
-            <ExportButtons data={dataTable} />
           </div>
-          {isAdmin && (
-            <Button
-              className="w-full sm:w-fit self-end"
-              size="sm"
-              onClick={() => setUpsertOpenId("new")}
-            >
-              <PlusIcon className="size-4 mr-2" />{" "}
-              <span className="line-clamp-1">Tambah prasarana</span>
-            </Button>
-          )}
+          <div className="flex flex-wrap items-center gap-4">
+            <ExportButtons data={dataTable} />
+            {isAdmin && (
+              <Button
+                className="w-full flex items-center sm:w-fit text-xs"
+                // size="sm"
+                onClick={() => setUpsertOpenId("new")}
+              >
+                <BsFileEarmarkPlusFill className="size-6 pr-2 border-r" />{" "}
+                <span className="line-clamp-1 pl-2">Tambah prasarana</span>
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* data-table */}
         <div className="my-4">
           <div>
             <div className="py-4 border-t flex flex-col sm:flex-row gap-2 items-center">
-              {/* <BulkAction
-                selectedIds={selectedIds}
-                setSelectedIds={setSelectedIds}
-              /> */}
-              {/* <Button size="sm" onClick={() => setUpsertOpenId("new")}>
-                <PlusIcon className="size-4 mr-2" />{" "}
-                <span className="line-clamp-1">Tambah prasarana</span>
-              </Button> */}
               <div className="flex items-center gap-2 flex-wrap">
                 <SelectWithLabel
                   withLabel={false}
@@ -301,7 +303,7 @@ const ClientComp = ({ kategoris }: Props) => {
           </div>
         </div>
       </main>
-    </>
+    </div>
   );
 };
 

@@ -3,6 +3,8 @@ import { RiDashboardLine } from "react-icons/ri";
 import { MdOutlineCategory } from "react-icons/md";
 import { PiBuildingOffice, PiFileArchive } from "react-icons/pi";
 import { BiCategory, BiUser } from "react-icons/bi";
+import { UserRole } from "@prisma/client";
+import { ISADMIN } from "./role";
 
 type NavType = {
   label: string;
@@ -19,7 +21,10 @@ type NavListType = {
   sub?: NavType[];
 };
 
-export const navigations = (isAdmin: boolean) => {
+export const navigations = (role: UserRole | undefined) => {
+  const isAdmin = ISADMIN(role);
+  const isSemiAdmin = role === "KONSULTAN" || role === "LAPANGAN";
+
   let routes: NavListType[] = [
     {
       type: "subtitle",
@@ -37,13 +42,19 @@ export const navigations = (isAdmin: boolean) => {
       href: "/prasarana",
       icon: PiBuildingOffice,
     },
-    {
-      type: "single",
-      label: "Files",
-      href: "/files",
-      icon: PiFileArchive,
-    },
   ];
+
+  if (!isSemiAdmin) {
+    routes = [
+      ...routes,
+      {
+        type: "single",
+        label: "Files",
+        href: "/files",
+        icon: PiFileArchive,
+      },
+    ];
+  }
 
   if (isAdmin) {
     routes = [

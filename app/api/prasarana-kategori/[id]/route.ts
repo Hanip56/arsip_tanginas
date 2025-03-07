@@ -40,14 +40,6 @@ export async function PUT(
       );
 
       newImageUrl = webContentLink;
-
-      // delete old image
-      const oldFileId = extractFileId(prasaranaKategori.imageUrl ?? "");
-      if (oldFileId) {
-        await drive.files.delete({
-          fileId: oldFileId,
-        });
-      }
     }
 
     const updatedPrasaranaKategori = await prisma.prasaranaKategori.update({
@@ -60,6 +52,14 @@ export async function PUT(
         imageUrl: newImageUrl ?? undefined,
       },
     });
+
+    // delete old image
+    const oldFileId = extractFileId(prasaranaKategori.imageUrl ?? "");
+    if (oldFileId) {
+      await drive.files.delete({
+        fileId: oldFileId,
+      });
+    }
 
     return NextResponse.json(updatedPrasaranaKategori);
   } catch (error) {

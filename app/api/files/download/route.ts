@@ -42,8 +42,6 @@ export async function GET(req: NextRequest) {
     );
     headers.append("Content-Type", mimeType);
 
-    console.log({ data: response.data });
-
     return new NextResponse(response.data as any, { status: 200, headers });
   } catch (error) {
     console.log("[DOWNLOAD_FILE]", error);

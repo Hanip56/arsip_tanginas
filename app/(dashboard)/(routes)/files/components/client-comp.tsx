@@ -81,20 +81,29 @@ const ClientComp = ({ totalFiles }: Props) => {
   }));
 
   return (
-    <>
+    <div className="bg-white rounded-md p-6 shadow-sm">
+      <h1 className="text-2xl font-semibold mb-4">Daftar Files</h1>
       <main>
-        <div className="w-full py-3 border-b flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div className="w-full py-5 border-b flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="w-full md:max-w-md">
-            <Label className="text-zinc-500 text-[.7rem]">Cari file</Label>
+            <Label
+              className="text-zinc-500 text-[.7rem] sr-only"
+              htmlFor="cari-file"
+            >
+              Cari file
+            </Label>
             <Input
+              id="cari-file"
               value={search}
               onChange={handleSearch}
-              className="w-full text-xs"
-              placeholder="Cari berdasarkan nama"
+              className="w-full bg-white text-xs rounded-full"
+              placeholder="Cari nama file"
             />
           </div>
           <div className="w-full justify-end md:justify-start md:w-fit flex gap-2 items-center">
             <SelectWithLabel
+              containerClassName="w-full"
+              withLabel={false}
               label="Urutkan"
               value={createdTimeParam}
               items={[
@@ -108,7 +117,7 @@ const ClientComp = ({ totalFiles }: Props) => {
         </div>
 
         {/* data-table */}
-        <div className="my-4">
+        <div className="my-4 mt-5">
           <DataTable
             columns={columns()}
             data={dataTable}
@@ -138,7 +147,7 @@ const ClientComp = ({ totalFiles }: Props) => {
           />
         </div>
       </main>
-    </>
+    </div>
   );
 };
 

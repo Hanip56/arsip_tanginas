@@ -106,19 +106,8 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-white text-foreground;
+    @apply bg-[#f0f4f5] text-foreground;
   }
 }
 
 /* [#F5F7FB]/30 */
-
-
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}

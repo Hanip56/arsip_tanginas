@@ -33,7 +33,7 @@ const ClientComp = ({ arsipKategoris }: Props) => {
   const searchParams = useSearchParams();
   const pushQuery = usePushQuery();
   const { data: session } = useSession();
-  const isAdmin = ISADMIN(session?.user.role);
+  const isAdmin = session?.user.role !== "USER";
 
   const abortController = useRef<AbortController | null>(null);
   const [kategoriCount, setKategoriCount] = useState<Record<string, number>>(

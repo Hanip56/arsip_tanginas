@@ -1,4 +1,5 @@
 import { CONFIG_GOOGLE_CREDENTIALS } from "@/constants/google-drive";
+import { getCurrentUser } from "@/lib/server-utils";
 import { google } from "googleapis";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -7,6 +8,12 @@ export async function DELETE(
   { params }: { params: Promise<{ fileId: string }> }
 ) {
   try {
+    const user = await getCurrentUser();
+
+    if (user?.role === "USER") {
+      return new NextResponse("Forbidden", { status: 403 });
+    }
+
     const { fileId } = await params;
 
     const auth = new google.auth.GoogleAuth({
