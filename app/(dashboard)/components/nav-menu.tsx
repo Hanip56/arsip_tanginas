@@ -39,8 +39,8 @@ const NavMenu = () => {
       </div>
 
       {/* nav menu */}
-      <div className="py-2 text-zinc-900 flex flex-col justify-between h-[90vh]">
-        <div className="flex flex-col py-2  gap-1 overflow-y-auto sm:px-4">
+      <div className="py-2 text-zinc-900 flex flex-col justify-between h-[91vh]  overflow-auto">
+        <div className="flex flex-col py-2 pr-2  gap-1 overflow-y-auto sm:px-4">
           {navigations(session?.user.role).map((nav, i) =>
             nav.href && nav.type === "single" ? (
               <Link
@@ -112,7 +112,7 @@ const NavMenu = () => {
             )
           )}
         </div>
-        <div className="p-4 w-full">
+        <div className="p-4 w-full flex-shrink-0 mb-4">
           <Button
             onClick={handleLogout}
             variant="ghost"
