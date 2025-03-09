@@ -1,14 +1,13 @@
 import Link from "next/link";
 import LoginForm from "./components/login-form";
 import { Card } from "@/components/ui/card";
+import { RiInboxArchiveFill } from "react-icons/ri";
 
 const LoginPage = () => {
   return (
-    <Card className="w-full flex flex-col gap-5 p-6 sm:p-10 shadow-none">
+    <div className="bg-white sm:bg-transparent p-8 sm:p-4 w-full flex flex-col gap-5 shadow-none rounded-md">
       <header>
-        <div className="text-3xl text-main-2 font-bold mb-3">
-          Tanginas Arsip
-        </div>
+        <div className="text-3xl text-main-2 font-bold mb-3">Masuk</div>
       </header>
       <main>
         <LoginForm />
@@ -21,7 +20,7 @@ const LoginPage = () => {
           </Link>
         </p>
       </div> */}
-    </Card>
+    </div>
   );
 };
 
