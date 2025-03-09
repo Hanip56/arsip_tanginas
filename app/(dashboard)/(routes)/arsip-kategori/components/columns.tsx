@@ -37,10 +37,6 @@ export const columns = ({
       header: "Nama",
     },
     {
-      accessorKey: "deskripsi",
-      header: "Deskripsi",
-    },
-    {
       accessorKey: "access",
       header: "Akses",
     },

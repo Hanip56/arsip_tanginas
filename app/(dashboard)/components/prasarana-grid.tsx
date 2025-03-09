@@ -81,8 +81,8 @@ const PrasaranaGrid = ({ kategoris }: Props) => {
     <Card className="w-full h-full">
       <CardHeader className="mb-4">
         <CardTitle className="mb-3">Arsip Prasarana</CardTitle>
-        <div className="flex items-center justify-between">
-          <div className="flex items-end gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+          <div className="w-full flex items-end gap-4">
             <div className="w-full md:w-80 space-y-1">
               <Input
                 value={search}
@@ -101,6 +101,7 @@ const PrasaranaGrid = ({ kategoris }: Props) => {
             </div> */}
           </div>
           <SelectWithLabel
+            containerClassName="w-full sm:w-fit"
             withLabel={false}
             label="jenis Prasarana"
             value={kategoriId ?? undefined}

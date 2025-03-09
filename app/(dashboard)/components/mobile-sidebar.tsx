@@ -2,6 +2,7 @@
 
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -25,7 +26,10 @@ const MobileSidebar = () => {
       <SheetTrigger>
         <MenuIcon />
       </SheetTrigger>
-      <SheetContent side={"left"} className="px-4 pt-8">
+      <SheetContent
+        side={"left"}
+        className="px-4 pt-8 bg-main-2 border-transparent text-white"
+      >
         <SheetHeader className="sr-only">
           <SheetTitle>Arsip</SheetTitle>
         </SheetHeader>

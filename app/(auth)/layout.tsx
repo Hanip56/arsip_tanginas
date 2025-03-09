@@ -32,7 +32,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         />
 
         <div className="flex text-center sm:hidden items-center justify-center mb-6 absolute top-5 left-1/2 -translate-x-1/2 z-10">
-          <div className="px-4 py-2 rounded-full flex gap-2">
+          <div className="py-2 rounded-full flex gap-2">
             <RiInboxArchiveFill className="size-6 text-white" />
             <h1 className="font-bold text-white">Tanginas Arsip</h1>
           </div>

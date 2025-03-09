@@ -235,21 +235,26 @@ export const getLatestUploadedFile = async ({
     const orderBy = createdTime ? createdTime : "desc";
 
     // Fetch the latest files from Google Drive
-    const response = await drive.files.list({
-      q: `(${parent.ids
-        .map((id) => `'${id}' in parents`)
-        .join(
-          " or "
-        )}) and mimeType != 'application/vnd.google-apps.folder'${filterNama}`, // Only files related to parentFolder (arsipKategori)
-      orderBy: `createdTime ${orderBy}`, // Sort by latest created
-      fields:
-        "nextPageToken, files(id, name, mimeType, createdTime, size, thumbnailLink, parents)",
-      pageSize: limit, // Get only the latest files
-      pageToken: pageToken || undefined,
-    });
+    let filesTemp: drive_v3.Schema$File[] = [];
+    let nextPageToken: string | null = null;
 
-    const filesTemp = response.data?.files ?? [];
-    const nextPageToken = response.data?.nextPageToken ?? null;
+    if (parent.ids.length > 0) {
+      const response = await drive.files.list({
+        q: `(${parent.ids
+          .map((id) => `'${id}' in parents`)
+          .join(
+            " or "
+          )}) and mimeType != 'application/vnd.google-apps.folder'${filterNama} and trashed=false`, // Only files related to parentFolder (arsipKategori)
+        orderBy: `createdTime ${orderBy}`, // Sort by latest created
+        fields:
+          "nextPageToken, files(id, name, mimeType, createdTime, size, thumbnailLink, parents)",
+        pageSize: limit, // Get only the latest files
+        pageToken: pageToken || undefined,
+      });
+
+      filesTemp = response.data?.files ?? [];
+      nextPageToken = response.data?.nextPageToken ?? null;
+    }
 
     // Fetch all required prasarana records in one query
     const prasaranaRecords = await prisma.prasarana.findMany({
@@ -313,14 +318,20 @@ export const GetParentAndGrandParentFolder = async () => {
       ...new Set(grandParentFolders?.map((gpf) => gpf.name).filter(Boolean)),
     ];
 
-    const parentFoldersQuery = await drive.files.list({
-      q: `(${grandParentFolderIds
-        .map((id) => `'${id}' in parents`)
-        .join(" or ")}) and mimeType = 'application/vnd.google-apps.folder'`,
-      fields: "files(id, name, parents)",
-    });
+    let parentFolders: drive_v3.Schema$File[] | undefined = [];
 
-    const parentFolders = parentFoldersQuery.data.files;
+    if (grandParentFolderIds.length > 0) {
+      const parentFoldersQuery = await drive.files.list({
+        q: `(${grandParentFolderIds
+          .map((id) => `'${id}' in parents`)
+          .join(
+            " or "
+          )}) and mimeType = 'application/vnd.google-apps.folder' and trashed=false`,
+        fields: "files(id, name, parents)",
+      });
+
+      parentFolders = parentFoldersQuery.data.files;
+    }
 
     // Extract unique parent folder IDs (to minimize API calls)
     const parentFolderIds = [
