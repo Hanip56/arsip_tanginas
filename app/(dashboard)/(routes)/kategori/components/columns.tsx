@@ -16,10 +16,6 @@ export const columns = (
   setUpsertOpenId: (value: SetStateAction<string>) => void
 ): ColumnDef<ColumnType>[] => {
   return [
-    // {
-    //   accessorKey: "id",
-    //   header: "ID",
-    // },
     {
       id: "no",
       header: "No",
@@ -48,6 +44,10 @@ export const columns = (
     {
       accessorKey: "deskripsi",
       header: "Deskripsi",
+    },
+    {
+      accessorKey: "id",
+      header: "ID",
     },
     {
       id: "action",

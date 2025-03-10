@@ -1,7 +1,7 @@
 export const PrasaranaDummy = [
   {
     userId: "67bc8736ec6bebe141bef525",
-    kategoriId: "67b5b87e207156efaf63f956",
+    kategoriId: "67b5b88d207156efaf63f957",
     nama: "Irigasi Pertanian A",
     poktan: "Desa Cikancung",
     alamat: "Kampung Pasirpogor, Cikancung",
@@ -39,7 +39,7 @@ export const PrasaranaDummy = [
   },
   {
     userId: "67bc8736ec6bebe141bef525",
-    kategoriId: "67c541cb1eb6007ec25b24af",
+    kategoriId: "67b5b88d207156efaf63f957",
     nama: "Jembatan Pertanian C",
     poktan: "Desa Cicalengka",
     alamat: "Kampung Sindanglaya, Cicalengka",
@@ -58,7 +58,7 @@ export const PrasaranaDummy = [
   },
   {
     userId: "67bc8736ec6bebe141bef525",
-    kategoriId: "67c543d51eb6007ec25b24b1",
+    kategoriId: "67b5b88d207156efaf63f957",
     nama: "Pembangunan Jalan Pertanian D",
     poktan: "Desa Majalaya",
     alamat: "Kampung Babakan, Majalaya",
@@ -77,7 +77,7 @@ export const PrasaranaDummy = [
   },
   {
     userId: "67bc8736ec6bebe141bef525",
-    kategoriId: "67b5b87e207156efaf63f956",
+    kategoriId: "67b5b88d207156efaf63f957",
     nama: "Saluran Drainase E",
     poktan: "Desa Paseh",
     alamat: "Jalan Paseh, Kampung Pangkalan",
@@ -115,7 +115,7 @@ export const PrasaranaDummy = [
   },
   {
     userId: "67bc8736ec6bebe141bef525",
-    kategoriId: "67c541cb1eb6007ec25b24af",
+    kategoriId: "67b5b88d207156efaf63f957",
     nama: "Jalan Usaha Tani G",
     poktan: "Desa Katapang",
     alamat: "Jalan Katapang, Kampung Pasar",
@@ -134,7 +134,7 @@ export const PrasaranaDummy = [
   },
   {
     userId: "67bc8736ec6bebe141bef525",
-    kategoriId: "67c543d51eb6007ec25b24b1",
+    kategoriId: "67b5b88d207156efaf63f957",
     nama: "Pembangunan Tanggul H",
     poktan: "Desa Cimaung",
     alamat: "Kampung Cipanas, Cimaung",
@@ -153,7 +153,7 @@ export const PrasaranaDummy = [
   },
   {
     userId: "67bc8736ec6bebe141bef525",
-    kategoriId: "67c543d51eb6007ec25b24b1",
+    kategoriId: "67b5b88d207156efaf63f957",
     nama: "Jalan Tani I",
     poktan: "Desa Nagreg",
     alamat: "Kampung Gunung Leutik, Nagreg",
@@ -172,7 +172,7 @@ export const PrasaranaDummy = [
   },
   {
     userId: "67bc8736ec6bebe141bef525",
-    kategoriId: "67b5b87e207156efaf63f956",
+    kategoriId: "67b5b88d207156efaf63f957",
     nama: "Perbaikan Jembatan J",
     poktan: "Desa Banjaran",
     alamat: "Jalan Raya Banjaran, Kampung Babakan",
@@ -210,7 +210,7 @@ export const PrasaranaDummy = [
   },
   {
     userId: "67bc8736ec6bebe141bef525",
-    kategoriId: "67c541cb1eb6007ec25b24af",
+    kategoriId: "67b5b88d207156efaf63f957",
     nama: "Pembuatan Embung L",
     poktan: "Desa Soreang",
     alamat: "Jalan Ciwidey, Soreang",
@@ -229,7 +229,7 @@ export const PrasaranaDummy = [
   },
   {
     userId: "67bc8736ec6bebe141bef525",
-    kategoriId: "67c543d51eb6007ec25b24b1",
+    kategoriId: "67b5b88d207156efaf63f957",
     nama: "Jalan Usaha M",
     poktan: "Desa Cangkuang",
     alamat: "Kampung Cangkuang Wetan",
@@ -248,7 +248,7 @@ export const PrasaranaDummy = [
   },
   {
     userId: "67bc8736ec6bebe141bef525",
-    kategoriId: "67b5b87e207156efaf63f956",
+    kategoriId: "67b5b88d207156efaf63f957",
     nama: "Perbaikan Jalan N",
     poktan: "Desa Cileunyi",
     alamat: "Kampung Cipacing, Cileunyi",
@@ -286,7 +286,7 @@ export const PrasaranaDummy = [
   },
   {
     userId: "67bc8736ec6bebe141bef525",
-    kategoriId: "67c541cb1eb6007ec25b24af",
+    kategoriId: "67b5b88d207156efaf63f957",
     nama: "Saluran Air P",
     poktan: "Desa Ciparay",
     alamat: "Kampung Ciparay, Ciparay",

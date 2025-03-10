@@ -141,7 +141,7 @@ export const columns = ({
     },
     {
       accessorKey: "status",
-      header: () => <div className="w-40">Status</div>,
+      header: () => <div className="w-40">Kondisi</div>,
       cell: ({ row }) => <div className="w-40">{row.original.status}</div>,
     },
     {

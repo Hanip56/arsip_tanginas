@@ -24,6 +24,7 @@ import { useSession } from "next-auth/react";
 import ExportButtons from "@/components/export-buttons";
 import { ISADMIN } from "@/constants/role";
 import { BsFileEarmarkPlusFill } from "react-icons/bs";
+import ImportDialog from "./import-dialog";
 
 type Props = {
   kategoris: PrasaranaKategori[];
@@ -125,6 +126,25 @@ const ClientComp = ({ kategoris }: Props) => {
     nilaiAnggaran: toRupiah(prasarana.nilaiAnggaran),
   }));
 
+  const dataExport = prasaranas.map((prasarana) => ({
+    ["Nama"]: prasarana.nama,
+    ["Kategori"]: prasarana.kategori.nama,
+    ["Poktan"]: prasarana.poktan,
+    ["Alamat"]: prasarana.alamat,
+    ["Desa"]: prasarana.desa,
+    ["Tahun Anggaran"]: prasarana.tahunAnggaran,
+    ["Volume"]: prasarana.volume,
+    ["Satuan"]: prasarana.satuan,
+    ["Longitude"]: prasarana.longitude,
+    ["Latitude"]: prasarana.latitude,
+    ["Sumber Anggaran"]: prasarana.sumberAnggaran,
+    ["Jenis Lahan"]: prasarana.jenisLahan,
+    ["Kondisi"]: prasarana.status,
+    ["Kecamatan"]: prasarana.kecamatan,
+    ["BPP"]: prasarana.bpp,
+    ["Nilai Anggaran"]: prasarana.nilaiAnggaran,
+  }));
+
   const isFiltering = Object.keys(params).some((v) => filterParams.includes(v));
 
   return (
@@ -156,7 +176,8 @@ const ClientComp = ({ kategoris }: Props) => {
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-4">
-            <ExportButtons data={dataTable} />
+            <ExportButtons data={dataExport} />
+            <ImportDialog />
             {isAdmin && (
               <Button
                 className="w-full flex items-center sm:w-fit text-xs"
